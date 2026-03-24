@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@import "tailwindcss";
+@plugin "daisyui";
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: hsl(0 0% 98%);
+  --color-base-300: hsl(0 0% 100%);
+  --color-base-200: hsl(215 60% 96%);
+  --color-base-content: hsl(220 15% 15%);
+  --color-primary: hsl(215 70% 48%);
+  --color-primary-content: hsl(0 0% 100%);
+  --color-secondary: hsl(215 15% 94%);
+  --color-secondary-content: hsl(220 15% 25%);
+  --color-accent: hsl(215 60% 95%);
+  --color-accent-content: hsl(215 70% 40%);
+  --color-neutral: hsl(220 10% 96%);
+  --color-neutral-content: hsl(220 10% 50%);
+  --color-info: hsl(215 70% 40%);
+  --color-info-content: hsl(0 0% 100%);
+  --color-success: hsl(145 60% 42%);
+  --color-success-content: hsl(0 0% 100%);
+  --color-warning: hsl(38 92% 50%);
+  --color-warning-content: hsl(0 0% 100%);
+  --color-error: hsl(0 72% 55%);
+  --color-error-content: hsl(0 0% 100%);
+
+  --radius-selector: 1rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  --border: 1px;
+
+  --depth: 1;
+  --noise: 0;
+}
+
+@theme {
+  --font-poppins: Poppins, sans-serif;
+}
+
+@utility btn {
+  @apply shadow-none focus:ring-2 focus:ring-primary/40;
+}
