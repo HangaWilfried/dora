@@ -3,6 +3,7 @@ import { useI18n } from 'vue-i18n'
 import StatisticCard from '@/components/StatisticCard.vue'
 import BaseContainer from '@/components/BaseContainer.vue'
 import { Users2, CalendarDays, ClockAlert, FileSpreadsheet } from 'lucide-vue-next'
+import PageTitle from '@/components/PageTitle.vue'
 
 const { t } = useI18n({
   messages: {
@@ -40,10 +41,10 @@ const { t } = useI18n({
 
 <template>
   <BaseContainer>
-    <div class="flex flex-col gap-0.5">
-      <h1 class="font-bold">{{ t('hello', { user: 'dora' }) }}</h1>
-      <span>{{ t('guide') }}</span>
-    </div>
+    <PageTitle>
+      <h1 class="font-medium">{{ t('hello', { user: 'dora' }) }}</h1>
+      <span class="text-xs">{{ t('guide') }}</span>
+    </PageTitle>
     <div class="grid grid-cols-5 gap-4">
       <StatisticCard
         :label="t('cards.totalRequests')"

@@ -1,3 +1,7 @@
 import dayjs from 'dayjs'
 
-export { dayjs }
+const getLocaleDate = (date?: string) => {
+  return dayjs(date).format('DD/MM/YYYY')
+}
+
+export { dayjs, getLocaleDate }

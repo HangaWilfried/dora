@@ -15,7 +15,10 @@ const router = createRouter({
     {
       path: '/',
       component: AppLayout,
-      children: [{ path: '', component: () => import('@/views/DashboardPage.vue') }],
+      children: [
+        { path: '', component: () => import('@/views/DashboardPage.vue') },
+        { path: 'vacations', component: () => import('@/views/VacationListPage.vue') },
+      ],
     },
     { path: '/:pathMatch(.*)*', redirect: '/' },
   ],
