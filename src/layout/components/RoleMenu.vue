@@ -2,6 +2,7 @@
 import { useI18n } from 'vue-i18n'
 import { useAuth } from '@/plugins/useAuth.ts'
 import { LogOut, Users2, Calendar, Settings, LayoutDashboard } from 'lucide-vue-next'
+import AppLogo from '@/components/AppLogo.vue'
 
 const authState = useAuth()
 const user = authState.getUserInfo()
@@ -50,39 +51,42 @@ const menus = [
 </script>
 
 <template>
-  <div class="drawer-side is-drawer-close:overflow-visible">
-    <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
-    <div
-      :class="[
-        'bg-base-300 is-drawer-close:w-14 is-drawer-open:w-64',
-        'border-secondary-content/20 flex min-h-full flex-col justify-between border-r',
-      ]"
-    >
-      <ul class="menu w-full grow">
-        <li v-for="menu in menus" :key="menu.name">
-          <RouterLink
-            :to="menu.path"
-            :data-tip="t(menu.name)"
-            exact-active-class="bg-primary/10 text-primary"
-            class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-          >
-            <component :is="menu.icon" class="size-4 text-current" />
-            <span class="is-drawer-close:hidden">{{ t(menu.name) }}</span>
-          </RouterLink>
-        </li>
-      </ul>
-      <ul class="menu w-full">
-        <li class="flex flex-col gap-2">
-          <span>{{ user.lastname }}</span>
-          <span>{{ user.email }}</span>
-        </li>
-        <li @click="authState.logout">
-          <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Logout">
-            <LogOut class="size-4" />
-            <span class="is-drawer-close:hidden">{{ t('logout') }}</span>
-          </button>
-        </li>
-      </ul>
+  <div
+    :class="[
+      'bg-base-300 divide-secondary-content/20 flex min-h-full flex-col divide-y',
+      'is-drawer-close:w-14 is-drawer-open:w-64 border-secondary-content/20 w-64 border-r',
+    ]"
+  >
+    <div class="p-4">
+      <AppLogo />
     </div>
+    <ul class="menu w-full grow p-4">
+      <li v-for="menu in menus" :key="menu.name">
+        <RouterLink
+          :to="menu.path"
+          :data-tip="t(menu.name)"
+          exact-active-class="bg-primary/10 text-primary"
+          class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+        >
+          <component :is="menu.icon" class="size-4 text-current" />
+          <span class="is-drawer-close:hidden">{{ t(menu.name) }}</span>
+        </RouterLink>
+      </li>
+    </ul>
+    <ul class="menu w-full">
+      <li class="flex flex-col gap-2">
+        <span>{{ user.lastname }}</span>
+        <span>{{ user.email }}</span>
+      </li>
+      <li @click="authState.logout">
+        <button
+          class="is-drawer-close:tooltip is-drawer-close:tooltip-right btn btn-info"
+          data-tip="Logout"
+        >
+          <LogOut class="size-4" />
+          <span class="is-drawer-close:hidden">{{ t('logout') }}</span>
+        </button>
+      </li>
+    </ul>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Calendar } from 'lucide-vue-next'
+import { CalendarDays } from 'lucide-vue-next'
 
 withDefaults(
   defineProps<{
@@ -14,11 +14,11 @@ withDefaults(
 <template>
   <div :class="direction">
     <div
-      class="rounded-md w-fit bg-primary text-primary-content flex items-center justify-center p-2"
+      class="bg-primary text-primary-content flex w-fit items-center justify-center rounded-md p-2"
     >
-      <Calendar class="size-4" />
+      <CalendarDays class="size-4" />
     </div>
-    <span class="text-sm font-bold">LAO-CONGE</span>
+    <span class="text-sm font-medium">LAO-CONGE</span>
   </div>
 </template>
 
@@ -26,7 +26,7 @@ withDefaults(
 @reference "tailwindcss";
 
 .row {
-  @apply flex gap-2 items-center;
+  @apply flex items-center gap-2;
 }
 
 .column {
