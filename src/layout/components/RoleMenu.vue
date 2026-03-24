@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { useAuth } from '@/plugins/useAuth.ts'
-import { LogOut, Users2, Calendar, Settings, LayoutDashboard } from 'lucide-vue-next'
+import { LogOut, Users2, CalendarDays, Settings, LayoutDashboard } from 'lucide-vue-next'
 import AppLogo from '@/components/AppLogo.vue'
 
 const authState = useAuth()
@@ -35,7 +35,7 @@ const menus = [
   {
     path: '/vacations',
     name: 'vacations',
-    icon: Calendar,
+    icon: CalendarDays,
   },
   {
     path: '/employees',

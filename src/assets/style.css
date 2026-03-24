@@ -49,3 +49,7 @@
 @utility btn {
   @apply shadow-none focus:ring-2 focus:ring-primary/40;
 }
+
+@utility card {
+  @apply border border-secondary-content/20 rounded-md p-4 bg-base-300;
+}
