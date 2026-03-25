@@ -2,7 +2,11 @@
 import { MoveRight } from 'lucide-vue-next'
 import { getLocaleDate } from '@/plugins/date'
 import type { HolidayDTO } from '@/services/leavemanager'
+
 import HolidayStatus from '@/components/HolidayStatus.vue'
+import EditVacationRequest from '@/components/EditVacationRequest.vue'
+import SubmitVacationRequest from '@/components/SubmitVacationRequest.vue'
+import DeleteVacationRequest from '@/components/DeleteVacationRequest.vue'
 
 defineProps<{ holiday: HolidayDTO }>()
 </script>
@@ -22,6 +26,10 @@ defineProps<{ holiday: HolidayDTO }>()
       </div>
       <span>{{ holiday.description }}</span>
     </div>
-    <div class="flex items-center gap-2"></div>
+    <div class="flex items-center gap-2">
+      <SubmitVacationRequest :holiday-id="holiday.id" />
+      <EditVacationRequest :holiday="holiday" />
+      <DeleteVacationRequest :holiday-id="holiday.id" />
+    </div>
   </div>
 </template>

@@ -9,7 +9,7 @@ import PageTitle from '@/components/PageTitle.vue'
 import HolidayCard from '@/components/HolidayCard.vue'
 import DoraLoading from '@/components/DoraLoading.vue'
 import BaseContainer from '@/components/BaseContainer.vue'
-import CreateVacationForm from '@/components/CreateVacationForm.vue'
+import CreateVacationRequest from '@/components/CreateVacationRequest.vue'
 
 const { t } = useI18n({
   messages: {
@@ -53,7 +53,7 @@ const {
         <h1 class="font-medium">{{ t('title') }}</h1>
         <span class="text-xs">{{ t('description') }}</span>
       </PageTitle>
-      <CreateVacationForm />
+      <CreateVacationRequest />
     </div>
     <DoraLoading v-if="isLoading || isFetching" />
     <div v-else-if="holidays && holidays.length" class="space-y-2">
