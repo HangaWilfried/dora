@@ -33,7 +33,7 @@ const {
   isLoading,
   isFetching,
 } = useQuery({
-  queryKey: ['vacations'],
+  queryKey: ['my-vacations'],
   queryFn: async () => {
     const response = await HolidayService.getAllMyHolidays()
     if (isRequestFailed(response)) {

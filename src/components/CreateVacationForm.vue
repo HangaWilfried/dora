@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Plus } from 'lucide-vue-next'
 import { AlertDialogCancel } from 'reka-ui'
-import { useMutation, useQuery } from '@tanstack/vue-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 
 import { toast } from '@/plugins/toast.ts'
 import { useError } from '@/composables/useError.ts'
@@ -14,7 +15,8 @@ import AlertDialog from '@/components/AlertDialog.vue'
 import SelectInput from '@/components/SelectInput.vue'
 import ButtonWrapper from '@/components/ButtonWrapper.vue'
 import TextareaInput from '@/components/TextareaInput.vue'
-import { ref } from 'vue'
+
+const queryClient = useQueryClient()
 
 const { t } = useI18n({
   messages: {
@@ -73,7 +75,7 @@ const { isRequestFailed, getErrorMessage, setError } = useError()
 
 const schema = yup.object({
   title: yup.string().required('required_lbl'),
-  type: yup.number().required('required_lbl'),
+  type: yup.number().optional(),
   description: yup.string().optional(),
   period: yup.object({
     startDate: yup.string().required('required_lbl'),
@@ -125,6 +127,7 @@ const { mutate, isPending } = useMutation({
   onSuccess: () => {
     openModal.value = false
     toast.success(t('toast.success'))
+    queryClient.invalidateQueries({ queryKey: ['my-vacations'] })
   },
 })
 
