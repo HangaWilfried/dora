@@ -9,6 +9,8 @@ type Exception = {
 export const useError = () => {
   const session = useSessionStore()
   const { t } = useI18n({
+    useScope: 'global',
+    inheritLocale: true,
     messages: {
       en: {
         errors: {
@@ -39,7 +41,13 @@ export const useError = () => {
   }
 
   const getErrorMessage = (exception: Exception) => {
-    if (exception.error) return String(exception.error)
+    if (exception.error) {
+      if (typeof exception.error === 'string') {
+        return exception.error
+      }
+
+      return Object.values(exception.error).filter(Boolean)[0] ?? t('errors.unknownError')
+    }
     if (exception.status) return t(errorMap[exception.status] || 'errors.unknownError')
     return t('errors.unknownError')
   }

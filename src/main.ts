@@ -7,11 +7,17 @@ import App from './App.vue'
 import router from './router'
 import { i18n } from './plugins/locale'
 import { useAuth } from '@/plugins/useAuth.ts'
-import { toastProvider } from '@/plugins/toast.ts'
+import { queryClient, toastProvider } from '@/plugins/toast.ts'
 
 const pinia = createPinia()
 const app = createApp(App)
 
 useAuth().initAuth()
 
-app.use(pinia).use(router).use(VueQueryPlugin).use(i18n).use(toastProvider).mount('#app')
+app
+  .use(pinia)
+  .use(router)
+  .use(VueQueryPlugin, { queryClient })
+  .use(i18n)
+  .use(toastProvider)
+  .mount('#app')
