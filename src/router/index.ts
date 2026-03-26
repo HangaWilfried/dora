@@ -18,6 +18,8 @@ const router = createRouter({
       children: [
         { path: '', component: () => import('@/views/DashboardPage.vue') },
         { path: 'vacations', component: () => import('@/views/VacationListPage.vue') },
+        { path: 'settings', component: () => import('@/views/SettingsPage.vue') },
+        { path: 'settings/:id', component: () => import('@/views/HolidayTypeDetailsPage.vue') },
       ],
     },
     { path: '/:pathMatch(.*)*', redirect: '/' },
