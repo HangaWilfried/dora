@@ -18,6 +18,8 @@ const router = createRouter({
       children: [
         { path: '', component: () => import('@/views/DashboardPage.vue') },
         { path: 'vacations', component: () => import('@/views/VacationListPage.vue') },
+        { path: 'employees', component: () => import('@/views/EmployeeListPage.vue') },
+        { path: 'settings', component: () => import('@/views/SettingsPage.vue') },
       ],
     },
     { path: '/:pathMatch(.*)*', redirect: '/' },
@@ -27,11 +29,10 @@ const router = createRouter({
 const { isAuthenticated } = useAuth()
 
 router.beforeEach((to, _, next) => {
-  // if (isAuthenticated() || to.meta.isPublic) {
-  //   return next()
-  // }
-  // return next('/login')
-  next()
+  if (isAuthenticated() || to.meta.isPublic) {
+    return next()
+  }
+  return next('/login')
 })
 
 export default router

@@ -1,0 +1,221 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { UserPlus } from 'lucide-vue-next'
+import { AlertDialogCancel } from 'reka-ui'
+import { useMutation, useQueryClient } from '@tanstack/vue-query'
+
+import { toast } from '@/plugins/toast.ts'
+import { useError } from '@/composables/useError.ts'
+import { AdminService } from '@/services/leavemanager'
+import { toTypedSchema, useForm, yup } from '@/plugins/validator.ts'
+
+import TextInput from '@/components/TextInput.vue'
+import SelectInput from '@/components/SelectInput.vue'
+import AlertDialog from '@/components/AlertDialog.vue'
+import ButtonWrapper from '@/components/ButtonWrapper.vue'
+
+const queryClient = useQueryClient()
+
+const { t } = useI18n({
+  messages: {
+    en: {
+      role: {
+        RH: 'RH',
+        MANAGER: 'Manager',
+        EMPLOYEE: 'Employee',
+      },
+      new: 'Add employee',
+      toast: {
+        success: 'Employee has been created successfully',
+      },
+      modal: {
+        title: 'New employee',
+        field: {
+          email: {
+            label: 'Email',
+            placeholder: 'Ex: [EMAIL_ADDRESS]',
+          },
+          password: {
+            label: 'Password',
+            placeholder: 'Ex: password',
+          },
+          confirmPassword: {
+            label: 'Confirm Password',
+            placeholder: 'Ex: password',
+          },
+          role: {
+            label: 'Role',
+            placeholder: 'Ex: Employee',
+          },
+          firstname: {
+            label: 'First name',
+            placeholder: 'Eg: John',
+          },
+          lastname: {
+            label: 'Last name',
+            placeholder: 'Eg: Doe',
+          },
+          dateOfBirth: {
+            label: 'Date of birth',
+          },
+        },
+        btn: {
+          cancel: 'Cancel',
+          save: 'Save',
+        },
+      },
+    },
+    fr: {
+      role: {
+        RH: 'RH',
+        MANAGER: 'Manager',
+        EMPLOYEE: 'Employee',
+      },
+      new: 'Ajouter un employé',
+      toast: {
+        success: "L'employé a été créé avec succès",
+      },
+      modal: {
+        title: 'Nouvel employé',
+        field: {
+          email: {
+            label: 'Email',
+            placeholder: 'Ex: [EMAIL_ADDRESS]',
+          },
+          password: {
+            label: 'Password',
+            placeholder: 'Ex: password',
+          },
+          confirmPassword: {
+            label: 'Confirm Password',
+            placeholder: 'Ex: password',
+          },
+          role: {
+            label: 'Role',
+            placeholder: 'Ex: Employee',
+          },
+          firstname: {
+            label: 'Prénom',
+            placeholder: 'Ex: Jean',
+          },
+          lastname: {
+            label: 'Nom',
+            placeholder: 'Ex: Dupont',
+          },
+          dateOfBirth: {
+            label: 'Date de naissance',
+          },
+        },
+        btn: {
+          cancel: 'Annuler',
+          save: 'Enregistrer',
+        },
+      },
+    },
+  },
+})
+
+const openModal = ref<boolean>(false)
+
+const { isRequestFailed, getErrorMessage, setError } = useError()
+
+const schema = yup.object({
+  firstname: yup.string().required('required_lbl'),
+  lastname: yup.string().required('required_lbl'),
+  email: yup.string().email('invalid_email_lbl').required('required_lbl'),
+  password: yup.string().required('required_lbl'),
+  confirmPassword: yup
+    .string()
+    .required('required_lbl')
+    .oneOf([yup.ref('password')], 'passwords_do_not_match_lbl'),
+  role: yup.string().required('required_lbl'),
+})
+
+type EmployeePayload = yup.InferType<typeof schema>
+
+const { handleSubmit } = useForm({
+  validationSchema: toTypedSchema(schema),
+})
+
+const { mutate, isPending } = useMutation({
+  mutationFn: async (payload: EmployeePayload) => {
+    const response = await AdminService.createEmployee({ body: payload })
+
+    if (isRequestFailed(response)) {
+      setError(response)
+      throw getErrorMessage(response)
+    }
+
+    return response.data
+  },
+  onSuccess: () => {
+    openModal.value = false
+    toast.success(t('toast.success'))
+    queryClient.invalidateQueries({ queryKey: ['employees'] })
+  },
+})
+
+const createEmployee = handleSubmit((values) => mutate(values))
+</script>
+
+<template>
+  <AlertDialog v-model:open="openModal">
+    <template #trigger>
+      <ButtonWrapper class="btn-primary">
+        <UserPlus class="size-5 stroke-2" />
+        <span>{{ t('new') }}</span>
+      </ButtonWrapper>
+    </template>
+    <template #default>
+      <form @submit="createEmployee" class="divide-secondary-content/40 flex flex-col divide-y">
+        <h1 class="px-6 py-4 text-sm font-medium">{{ t('modal.title') }}</h1>
+        <div class="flex flex-col gap-2 px-6 py-4">
+          <TextInput
+            name="firstname"
+            :label="t('modal.field.firstname.label')"
+            :placeholder="t('modal.field.firstname.placeholder')"
+          />
+          <TextInput
+            name="lastname"
+            :label="t('modal.field.lastname.label')"
+            :placeholder="t('modal.field.lastname.placeholder')"
+          />
+          <TextInput
+            name="email"
+            :label="t('modal.field.email.label')"
+            :placeholder="t('modal.field.email.placeholder')"
+          />
+          <TextInput
+            name="password"
+            :label="t('modal.field.password.label')"
+            :placeholder="t('modal.field.password.placeholder')"
+          />
+          <TextInput
+            name="confirmPassword"
+            :label="t('modal.field.confirmPassword.label')"
+            :placeholder="t('modal.field.confirmPassword.placeholder')"
+          />
+          <SelectInput
+            name="role"
+            :options="[
+              { label: t('role.MANAGER'), value: 'ADMIN' },
+              { label: t('role.EMPLOYEE'), value: 'EMPLOYEE' },
+            ]"
+            :label="t('modal.field.role.label')"
+            :placeholder="t('modal.field.role.placeholder')"
+          />
+
+          <div class="mt-2 flex items-center justify-end gap-2">
+            <AlertDialogCancel class="btn btn-outline px-8">
+              {{ t('modal.btn.cancel') }}
+            </AlertDialogCancel>
+            <ButtonWrapper :is-loading="isPending" type="submit" class="btn-primary px-8">
+              {{ t('modal.btn.save') }}
+            </ButtonWrapper>
+          </div>
+        </div>
+      </form>
+    </template>
+  </AlertDialog>
+</template>

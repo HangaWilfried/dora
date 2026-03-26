@@ -46,3 +46,8 @@ npm run build
 ```sh
 npm run lint
 ```
+### Start with docker
+```sh
+docker compose up -d 
+```
+
