@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Trash2 } from 'lucide-vue-next'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query'
+import { ref, computed } from 'vue'
+import { useQuery } from '@tanstack/vue-query'
 
 import { useError } from '@/composables/useError'
-import { AdminService, EmployeeService } from '@/services/leavemanager'
+import { AdminService } from '@/services/leavemanager'
 
 import PageTitle from '@/components/PageTitle.vue'
 import DoraLoading from '@/components/DoraLoading.vue'
 import BaseContainer from '@/components/BaseContainer.vue'
-import ButtonWrapper from '@/components/ButtonWrapper.vue'
+import DeleteEmployee from '@/components/DeleteEmployee.vue'
 import CreateEmployeeRequest from '@/components/CreateEmployeeRequest.vue'
+import ViewEmployeeDetails from '@/components/ViewEmployeeDetails.vue'
 
 const { t } = useI18n({
   messages: {
@@ -65,7 +65,6 @@ const { t } = useI18n({
 })
 
 const search = ref('')
-const queryClient = useQueryClient()
 const { isRequestFailed, getErrorMessage, setError } = useError()
 
 const {
@@ -94,20 +93,6 @@ const filteredEmployees = computed(() => {
       e.lastname?.toLowerCase().includes(q) ||
       e.email?.toLowerCase().includes(q),
   )
-})
-
-const { mutate: deleteEmployee } = useMutation({
-  mutationFn: async (employeeId: number) => {
-    const response = await EmployeeService.deleteEmployeeById({ path: { employeeId } })
-    if (isRequestFailed(response)) {
-      setError(response)
-      throw getErrorMessage(response)
-    }
-    return response.data
-  },
-  onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ['employees'] })
-  },
 })
 </script>
 
@@ -165,14 +150,11 @@ const { mutate: deleteEmployee } = useMutation({
                   {{ employee.isActivated ? t('status.active') : t('status.inactive') }}
                 </span>
               </td>
-              <td class="text-right">
-                <ButtonWrapper
-                  class="btn-ghost btn-square btn-sm tooltip"
-                  :data-tip="t('delete')"
-                  @click="employee.id && deleteEmployee(employee.id)"
-                >
-                  <Trash2 class="text-error size-4 stroke-2" />
-                </ButtonWrapper>
+              <td>
+                <span class="flex items-center gap-2">
+                  <ViewEmployeeDetails :employee="employee" />
+                  <DeleteEmployee :employee="employee" />
+                </span>
               </td>
             </tr>
           </tbody>

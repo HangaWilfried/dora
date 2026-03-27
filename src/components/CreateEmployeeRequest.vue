@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { computed, ref } from 'vue'
 import { UserPlus } from 'lucide-vue-next'
 import { AlertDialogCancel } from 'reka-ui'
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
@@ -17,7 +17,7 @@ import ButtonWrapper from '@/components/ButtonWrapper.vue'
 
 const queryClient = useQueryClient()
 
-const { t } = useI18n({
+const { t, locale } = useI18n({
   messages: {
     en: {
       role: {
@@ -116,6 +116,14 @@ const { t } = useI18n({
   },
 })
 
+const roles = computed(() => {
+  console.log(locale.value)
+  return [
+    { label: t('role.MANAGER'), value: 'ADMIN' },
+    { label: t('role.EMPLOYEE'), value: 'EMPLOYEE' },
+  ]
+})
+
 const openModal = ref<boolean>(false)
 
 const { isRequestFailed, getErrorMessage, setError } = useError()
@@ -170,21 +178,27 @@ const createEmployee = handleSubmit((values) => mutate(values))
     <template #default>
       <form @submit="createEmployee" class="divide-secondary-content/40 flex flex-col divide-y">
         <h1 class="px-6 py-4 text-sm font-medium">{{ t('modal.title') }}</h1>
-        <div class="flex flex-col gap-2 px-6 py-4">
-          <TextInput
-            name="firstname"
-            :label="t('modal.field.firstname.label')"
-            :placeholder="t('modal.field.firstname.placeholder')"
-          />
+        <div class="grid grid-cols-2 gap-2 px-6 py-4">
           <TextInput
             name="lastname"
             :label="t('modal.field.lastname.label')"
             :placeholder="t('modal.field.lastname.placeholder')"
           />
           <TextInput
+            name="firstname"
+            :label="t('modal.field.firstname.label')"
+            :placeholder="t('modal.field.firstname.placeholder')"
+          />
+          <TextInput
             name="email"
             :label="t('modal.field.email.label')"
             :placeholder="t('modal.field.email.placeholder')"
+          />
+          <SelectInput
+            name="role"
+            :options="roles"
+            :label="t('modal.field.role.label')"
+            :placeholder="t('modal.field.role.placeholder')"
           />
           <TextInput
             name="password"
@@ -196,24 +210,14 @@ const createEmployee = handleSubmit((values) => mutate(values))
             :label="t('modal.field.confirmPassword.label')"
             :placeholder="t('modal.field.confirmPassword.placeholder')"
           />
-          <SelectInput
-            name="role"
-            :options="[
-              { label: t('role.MANAGER'), value: 'ADMIN' },
-              { label: t('role.EMPLOYEE'), value: 'EMPLOYEE' },
-            ]"
-            :label="t('modal.field.role.label')"
-            :placeholder="t('modal.field.role.placeholder')"
-          />
-
-          <div class="mt-2 flex items-center justify-end gap-2">
-            <AlertDialogCancel class="btn btn-outline px-8">
-              {{ t('modal.btn.cancel') }}
-            </AlertDialogCancel>
-            <ButtonWrapper :is-loading="isPending" type="submit" class="btn-primary px-8">
-              {{ t('modal.btn.save') }}
-            </ButtonWrapper>
-          </div>
+        </div>
+        <div class="mt-2 flex items-center justify-end gap-2 px-6 py-4">
+          <AlertDialogCancel class="btn btn-outline px-8">
+            {{ t('modal.btn.cancel') }}
+          </AlertDialogCancel>
+          <ButtonWrapper :is-loading="isPending" type="submit" class="btn-primary px-8">
+            {{ t('modal.btn.save') }}
+          </ButtonWrapper>
         </div>
       </form>
     </template>

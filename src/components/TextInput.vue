@@ -5,6 +5,7 @@ import FieldError from '@/components/FieldError.vue'
 const { name, type = 'text' } = defineProps<{
   name: string
   label: string
+  disabled?: boolean
   placeholder?: string
   modelValue?: unknown
   type?: 'number' | 'password' | 'email' | 'text' | 'date'
@@ -17,12 +18,13 @@ const { value, errorMessage } = useField(() => name, undefined, { syncVModel: tr
   <div class="fieldset">
     <label :for="name" class="fieldset-label">{{ label }}</label>
     <input
-      :type="type"
-      v-model="value"
       :id="name"
       :name="name"
-      :placeholder="placeholder"
+      :type="type"
+      v-model="value"
       class="input w-full"
+      :disabled="disabled"
+      :placeholder="placeholder"
     />
     <FieldError :error="errorMessage" />
   </div>
