@@ -1,47 +1,47 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Trash2 } from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n'
 import { AlertDialogCancel } from 'reka-ui'
+import { ToggleLeft } from 'lucide-vue-next'
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
 
 import { toast } from '@/plugins/toast.ts'
 import { useError } from '@/composables/useError.ts'
+import { HolidayConfigService } from '@/services/leavemanager'
 
 import AlertDialog from '@/components/AlertDialog.vue'
-import { HolidayService } from '@/services/leavemanager'
 import ButtonWrapper from '@/components/ButtonWrapper.vue'
-import { useI18n } from 'vue-i18n'
 
-const { holidayTypeId } = defineProps<{ holidayTypeId?: number }>()
+const { holidayConfigId } = defineProps<{ holidayConfigId?: number }>()
 
 const { t } = useI18n({
   useScope: 'global',
   inheritLocale: true,
   messages: {
     en: {
-      tooltip: 'Delete',
+      tooltip: 'Activate',
       modal: {
-        title: 'You are about to delete a leave type',
+        title: 'You are about to activate a leave type',
         description:
-          'This action is permanent. The leave type will be permanently deleted from the system.',
+          'This action will activate the leave type. It will no longer be available for use, but can be deactivated later.',
         cancel: 'Cancel',
-        confirm: 'Delete',
+        confirm: 'Activate',
       },
       toast: {
-        success: 'The leave type has been deleted',
+        success: 'The leave type has been activated',
       },
     },
     fr: {
-      tooltip: 'Supprimer',
+      tooltip: 'Activer',
       modal: {
-        title: 'Vous êtes sur le point de supprimer un type de congé',
+        title: "Vous êtes sur le point d' activer un type de congé",
         description:
-          'Cette action est irréversible. Le type de congé sera définitivement supprimé du système.',
+          'Cette action activera le type de congé. Il sera désormais utilisable, mais pourra être désactivé ultérieurement.',
         cancel: 'Annuler',
-        confirm: 'Supprimer',
+        confirm: 'Activer',
       },
       toast: {
-        success: 'Le type de congé a été supprimé',
+        success: 'Le type de congé a été activé',
       },
     },
   },
@@ -51,13 +51,13 @@ const queryClient = useQueryClient()
 const openModal = ref<boolean>(false)
 const { isRequestFailed, getErrorMessage, setError } = useError()
 
-const { mutate: deleteHolidayType, isPending } = useMutation({
+const { mutate: activateHolidayConfig, isPending } = useMutation({
   mutationFn: async () => {
-    if (!holidayTypeId) {
+    if (!holidayConfigId) {
       throw new Error('Missing holiday type id')
     }
 
-    const response = await HolidayService.deleteHolidayTypeById({ path: { holidayTypeId } })
+    const response = await HolidayConfigService.activateHolidayConfig({ path: { holidayConfigId } })
 
     if (isRequestFailed(response)) {
       setError(response)
@@ -77,9 +77,8 @@ const { mutate: deleteHolidayType, isPending } = useMutation({
 <template>
   <AlertDialog v-model:open="openModal">
     <template #trigger>
-      <ButtonWrapper class="btn-outline btn-error">
-        <Trash2 class="size-5 stroke-2" />
-        <span>{{ t('tooltip') }}</span>
+      <ButtonWrapper class="btn-square btn-ghost tooltip" :data-tip="t('tooltip')">
+        <ToggleLeft class="text-secondary-content/60 size-5 stroke-2" />
       </ButtonWrapper>
     </template>
     <div class="flex flex-col gap-4 p-6">
@@ -91,7 +90,11 @@ const { mutate: deleteHolidayType, isPending } = useMutation({
         <AlertDialogCancel class="btn btn-outline px-8">
           {{ t('modal.cancel') }}
         </AlertDialogCancel>
-        <ButtonWrapper @click="deleteHolidayType" :is-loading="isPending" class="btn-primary px-8">
+        <ButtonWrapper
+          @click="activateHolidayConfig"
+          :is-loading="isPending"
+          class="btn-primary px-8"
+        >
           {{ t('modal.confirm') }}
         </ButtonWrapper>
       </div>

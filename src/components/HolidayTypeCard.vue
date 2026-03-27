@@ -1,18 +1,22 @@
 <script setup lang="ts">
+import { ChevronRight } from 'lucide-vue-next'
 import type { HolidayTypeDTO } from '@/services/leavemanager'
-import DeleteHolidayType from '@/components/DeleteHolidayType.vue'
+import ButtonWrapper from '@/components/ButtonWrapper.vue'
 
 defineProps<{ holidayType: HolidayTypeDTO }>()
 </script>
 
 <template>
-  <div class="text-secondary-content card flex flex-row items-start justify-between text-xs">
+  <RouterLink
+    :to="`/settings/${holidayType.id}`"
+    class="text-secondary-content card flex flex-row items-start justify-between text-xs"
+  >
     <div class="flex flex-col gap-2">
       <h1 class="text-base-content text-sm font-medium">{{ holidayType.name }}</h1>
       <span>{{ holidayType.description }}</span>
     </div>
-    <div class="flex items-center gap-2">
-      <DeleteHolidayType :holiday-type-id="holidayType.id" />
-    </div>
-  </div>
+    <ButtonWrapper class="btn-square btn-ghost">
+      <ChevronRight class="text-secondary-content/60 size-5 stroke-2" />
+    </ButtonWrapper>
+  </RouterLink>
 </template>

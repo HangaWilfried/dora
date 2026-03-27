@@ -688,8 +688,11 @@ export type GetAllHolidayConfigByHolidayType_Responses = {
   /**
    * successful operation
    */
-  200: unknown
+  200: Array<HolidayConfigDTO>
 }
+
+export type GetAllHolidayConfigByHolidayType_Response =
+  GetAllHolidayConfigByHolidayType_Responses[keyof GetAllHolidayConfigByHolidayType_Responses]
 
 export type ActivateHolidayConfig_Data = {
   body?: never

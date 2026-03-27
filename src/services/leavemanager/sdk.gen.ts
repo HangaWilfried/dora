@@ -48,6 +48,7 @@ import type {
   GetHolidayConfigById_Data,
   GetHolidayConfigById_Response,
   GetAllHolidayConfigByHolidayType_Data,
+  GetAllHolidayConfigByHolidayType_Response,
   ActivateHolidayConfig_Data,
   ActivateHolidayConfig_Response,
   DeactivateHolidayConfig_Data,
@@ -727,7 +728,11 @@ export class HolidayConfigService {
   public static getAllHolidayConfigByHolidayType<ThrowOnError extends boolean = false>(
     options: Options<GetAllHolidayConfigByHolidayType_Data, ThrowOnError>,
   ) {
-    return (options.client ?? _heyApiClient).get<unknown, unknown, ThrowOnError>({
+    return (options.client ?? _heyApiClient).get<
+      GetAllHolidayConfigByHolidayType_Response,
+      unknown,
+      ThrowOnError
+    >({
       security: [
         {
           scheme: 'bearer',
