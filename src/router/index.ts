@@ -17,8 +17,9 @@ const router = createRouter({
       component: AppLayout,
       children: [
         { path: '', component: () => import('@/views/DashboardPage.vue') },
-        { path: 'vacations', component: () => import('@/views/VacationListPage.vue') },
         { path: 'settings', component: () => import('@/views/SettingsPage.vue') },
+        { path: 'vacations', component: () => import('@/views/AllVacationsPage.vue') },
+        { path: 'me/vacations', component: () => import('@/views/MyVacationsPage.vue') },
         { path: 'settings/:id', component: () => import('@/views/HolidayTypeDetailsPage.vue') },
       ],
     },
@@ -29,11 +30,10 @@ const router = createRouter({
 const { isAuthenticated } = useAuth()
 
 router.beforeEach((to, _, next) => {
-  // if (isAuthenticated() || to.meta.isPublic) {
-  //   return next()
-  // }
-  // return next('/login')
-  next()
+  if (isAuthenticated() || to.meta.isPublic) {
+    return next()
+  }
+  return next('/login')
 })
 
 export default router

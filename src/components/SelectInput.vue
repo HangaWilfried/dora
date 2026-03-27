@@ -5,9 +5,10 @@ import DoraLoading from '@/components/DoraLoading.vue'
 
 const { name, options = [] } = defineProps<{
   name: string
-  label: string
+  label?: string
   isLoading?: boolean
   placeholder?: string
+  modelValue?: unknown
   options?: Array<{ value: unknown; label: string }>
 }>()
 
@@ -16,7 +17,7 @@ const { value, errorMessage } = useField(() => name, undefined, { syncVModel: tr
 
 <template>
   <div class="fieldset">
-    <label :for="name" class="fieldset-label">
+    <label v-if="label" :for="name" class="fieldset-label">
       <DoraLoading v-if="isLoading" class="loading-xs" />
       {{ label }}
     </label>
