@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Ellipsis } from 'lucide-vue-next'
+import { computed, ref } from 'vue'
 import { AlertDialogCancel } from 'reka-ui'
+import { Ellipsis, Copy, Check } from 'lucide-vue-next'
 
 import { useForm } from '@/plugins/validator.ts'
 import { type EmployeeDTO } from '@/services/leavemanager'
@@ -14,7 +14,7 @@ import ButtonWrapper from '@/components/ButtonWrapper.vue'
 
 const { employee } = defineProps<{ employee: EmployeeDTO }>()
 
-const { t, locale } = useI18n({
+const { t } = useI18n({
   messages: {
     en: {
       tooltip: 'overview',
@@ -25,29 +25,16 @@ const { t, locale } = useI18n({
       },
       modal: {
         field: {
-          email: {
-            label: 'Email',
-            placeholder: 'Ex: [EMAIL_ADDRESS]',
-          },
-          password: {
-            label: 'Password',
-            placeholder: 'Ex: password',
-          },
-          role: {
-            label: 'Role',
-            placeholder: 'Ex: Employee',
-          },
-          firstname: {
-            label: 'First name',
-            placeholder: 'Eg: John',
-          },
-          lastname: {
-            label: 'Last name',
-            placeholder: 'Eg: Doe',
-          },
+          email: { label: 'Email', placeholder: 'Ex: [EMAIL_ADDRESS]' },
+          password: { label: 'Password', placeholder: 'Ex: password' },
+          role: { label: 'Role', placeholder: 'Ex: Employee' },
+          firstname: { label: 'First name', placeholder: 'Eg: John' },
+          lastname: { label: 'Last name', placeholder: 'Eg: Doe' },
         },
         btn: {
           cancel: 'Close',
+          copy: 'Copy credentials',
+          copied: 'Copied!',
         },
       },
     },
@@ -61,29 +48,16 @@ const { t, locale } = useI18n({
       modal: {
         title: 'Nouvel employé',
         field: {
-          email: {
-            label: 'Email',
-            placeholder: 'Ex: [EMAIL_ADDRESS]',
-          },
-          password: {
-            label: 'Password',
-            placeholder: 'Ex: password',
-          },
-          role: {
-            label: 'Role',
-            placeholder: 'Ex: Employee',
-          },
-          firstname: {
-            label: 'Prénom',
-            placeholder: 'Ex: Jean',
-          },
-          lastname: {
-            label: 'Nom',
-            placeholder: 'Ex: Dupont',
-          },
+          email: { label: 'Email', placeholder: 'Ex: [EMAIL_ADDRESS]' },
+          password: { label: 'Password', placeholder: 'Ex: password' },
+          role: { label: 'Role', placeholder: 'Ex: Employee' },
+          firstname: { label: 'Prénom', placeholder: 'Ex: Jean' },
+          lastname: { label: 'Nom', placeholder: 'Ex: Dupont' },
         },
         btn: {
           cancel: 'Fermer',
+          copy: 'Copier les identifiants',
+          copied: 'Copié !',
         },
       },
     },
@@ -101,12 +75,20 @@ useForm({
 })
 
 const roles = computed(() => {
-  console.log(locale.value)
   return [
     { label: t('role.MANAGER'), value: 'ADMIN' },
     { label: t('role.EMPLOYEE'), value: 'EMPLOYEE' },
   ]
 })
+
+const copied = ref(false)
+
+async function copyCredentials() {
+  const text = `Email: ${employee.email}\nPassword: ${employee.password}`
+  await navigator.clipboard.writeText(text)
+  copied.value = true
+  setTimeout(() => (copied.value = false), 2000)
+}
 </script>
 
 <template>
@@ -151,7 +133,12 @@ const roles = computed(() => {
             :placeholder="t('modal.field.role.placeholder')"
           />
         </div>
-        <div class="flex items-center justify-end">
+        <div class="flex items-center justify-end gap-2">
+          <ButtonWrapper type="button" class="btn-outline gap-2" @click="copyCredentials">
+            <Check v-if="copied" class="size-4" />
+            <Copy v-else class="size-4" />
+            {{ copied ? t('modal.btn.copied') : t('modal.btn.copy') }}
+          </ButtonWrapper>
           <AlertDialogCancel class="btn btn-outline px-8">
             {{ t('modal.btn.cancel') }}
           </AlertDialogCancel>
