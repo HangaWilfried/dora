@@ -7,7 +7,8 @@ import SelectInput from '@/components/SelectInput.vue'
 const { t, locale } = useI18n({
   messages: {
     fr: {
-      ALL: 'Tout',
+      search: 'Rechercher...',
+      ALL: 'Tous les status',
       DRAFT: 'Brouillon',
       PUBLISH: 'Publié',
       APPROVED: 'Approuvé',
@@ -17,7 +18,8 @@ const { t, locale } = useI18n({
       PASSED: 'Terminé',
     },
     en: {
-      ALL: 'All',
+      search: 'Search...',
+      ALL: 'All status',
       DRAFT: 'Draft',
       PUBLISH: 'Published',
       APPROVED: 'Approved',
@@ -80,7 +82,12 @@ const searchCriteria = defineModel({
   <div class="flex items-center gap-2">
     <label class="input grow">
       <Search class="h-[1em] opacity-50" />
-      <input type="search" class="grow" placeholder="Search" v-model="searchCriteria.status" />
+      <input
+        class="grow"
+        type="search"
+        :placeholder="t('search')"
+        v-model="searchCriteria.queryString"
+      />
     </label>
     <SelectInput v-model="searchCriteria.status" name="status" :options="statuses" />
   </div>

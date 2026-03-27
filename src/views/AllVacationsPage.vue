@@ -12,11 +12,31 @@ import HolidayFilters from '@/components/HolidayFilters.vue'
 
 const { t } = useI18n({
   messages: {
-    en: {},
+    en: {
+      title: 'All leaves',
+      empty: 'No leave requests created',
+      description: 'Manage employee leave requests',
+      table: {
+        employee: 'Employee',
+        title: 'Title',
+        type: 'Type',
+        period: 'Period',
+        status: 'Status',
+        actions: 'Actions',
+      },
+    },
     fr: {
       title: 'Tous les congés',
-      empty: 'Aucune requete congé crée',
+      empty: 'Aucune requête de congé créée',
       description: 'Gérez les demandes de congés des employés',
+      table: {
+        employee: 'Employé',
+        title: 'Titre',
+        type: 'Type',
+        period: 'Période',
+        status: 'Statut',
+        actions: 'Actions',
+      },
     },
   },
 })
