@@ -15,6 +15,8 @@ import AlertDialog from '@/components/AlertDialog.vue'
 import SelectInput from '@/components/SelectInput.vue'
 import ButtonWrapper from '@/components/ButtonWrapper.vue'
 import TextareaInput from '@/components/TextareaInput.vue'
+import HolidayConfigInfo from '@/components/HolidayConfigInfo.vue'
+import ScaleTransition from '@/components/ScaleTransition.vue'
 
 const queryClient = useQueryClient()
 
@@ -85,7 +87,7 @@ const schema = yup.object({
 
 type HolidayPayload = yup.InferType<typeof schema>
 
-const { handleSubmit } = useForm({
+const { handleSubmit, values } = useForm({
   validationSchema: toTypedSchema(schema),
 })
 
@@ -108,7 +110,7 @@ const {
   select(types) {
     return types?.map((type) => ({
       value: type.id,
-      label: `${type.name} - (${type.description})`,
+      label: `${type.name} (${type.description})`,
     }))
   },
 })
@@ -154,6 +156,9 @@ const submitLeaveRequest = handleSubmit((values) => mutate(values))
             :is-loading="isFetching || isLoading"
             :placeholder="t('modal.field.type.placeholder')"
           />
+          <ScaleTransition>
+            <HolidayConfigInfo v-if="values.type" :holiday-type-id="values.type" />
+          </ScaleTransition>
           <div class="grid grid-cols-2 gap-4">
             <TextInput name="period.startDate" :label="t('modal.field.startDate')" type="date" />
             <TextInput name="period.endDate" :label="t('modal.field.endDate')" type="date" />

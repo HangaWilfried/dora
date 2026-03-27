@@ -35,8 +35,8 @@ const dayInterval = computed(() => `${holidayConfig.minimumOfDays}-${holidayConf
     <div class="flex flex-col gap-2">
       <h1 class="text-base-content text-sm font-medium">{{ holidayConfig.description }}</h1>
       <div class="text-secondary-content flex items-center gap-8">
-        <span>{{ t('time.year', { value: dayInterval }) }}</span>
-        <span>{{ t('time.day', { value: holidayConfig.minimumOfDays }) }}</span>
+        <span>{{ t('time.year', { value: holidayConfig.numberOfTime }) }}</span>
+        <span>{{ t('time.day', { value: dayInterval }) }}</span>
       </div>
     </div>
     <div class="flex items-center gap-2">

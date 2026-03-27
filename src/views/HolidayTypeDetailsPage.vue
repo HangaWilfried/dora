@@ -14,7 +14,6 @@ import BaseContainer from '@/components/BaseContainer.vue'
 import HolidayConfigs from '@/components/HolidayConfigs.vue'
 import EditHolidayType from '@/components/EditHolidayType.vue'
 import DeleteHolidayType from '@/components/DeleteHolidayType.vue'
-import CreateHolidayConfig from '@/components/CreateHolidayConfig.vue'
 
 const route = useRoute()
 
@@ -74,10 +73,6 @@ const {
           <EditHolidayType :holiday-type="holidayType" />
           <DeleteHolidayType :holiday-type-id="holidayType.id" />
         </div>
-      </div>
-      <div class="flex items-center justify-between">
-        <span class="text-sm">{{ t('config') }}</span>
-        <CreateHolidayConfig />
       </div>
       <HolidayConfigs :id="holidayType.id" />
     </template>

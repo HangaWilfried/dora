@@ -6,6 +6,7 @@ const { name, type = 'text' } = defineProps<{
   name: string
   label: string
   placeholder?: string
+  modelValue?: unknown
   type?: 'number' | 'password' | 'email' | 'text' | 'date'
 }>()
 

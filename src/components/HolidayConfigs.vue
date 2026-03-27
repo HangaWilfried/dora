@@ -7,15 +7,21 @@ import { useError } from '@/composables/useError.ts'
 import { HolidayConfigService } from '@/services/leavemanager'
 
 import DoraLoading from '@/components/DoraLoading.vue'
-import CreateHolidayType from '@/components/CreateHolidayType.vue'
 import HolidayConfigCard from '@/components/HolidayConfigCard.vue'
+import CreateHolidayConfig from '@/components/CreateHolidayConfig.vue'
 
 const { id } = defineProps<{ id?: number }>()
 
 const { t } = useI18n({
   messages: {
-    en: { empty: 'No configurations found' },
-    fr: { empty: 'Aucune configuration crée' },
+    en: {
+      config: 'Configurations',
+      empty: 'No configurations found',
+    },
+    fr: {
+      config: 'Configurations',
+      empty: 'Aucune configuration crée',
+    },
   },
 })
 
@@ -50,8 +56,8 @@ const {
 <template>
   <section class="flex flex-col gap-4">
     <div class="flex items-center justify-between">
-      <span class="text-sm font-medium">Configurations</span>
-      <CreateHolidayType />
+      <span class="text-sm">{{ t('config') }}</span>
+      <CreateHolidayConfig />
     </div>
     <DoraLoading v-if="isLoading || isFetching" />
     <div v-else-if="holidayConfigs && holidayConfigs.length" class="space-y-2">

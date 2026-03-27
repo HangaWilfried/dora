@@ -3,16 +3,15 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Plus } from 'lucide-vue-next'
 import { AlertDialogCancel } from 'reka-ui'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
+import { useMutation, useQueryClient } from '@tanstack/vue-query'
 
 import { toast } from '@/plugins/toast.ts'
 import { useError } from '@/composables/useError.ts'
-import { HolidayConfigService, HolidayService } from '@/services/leavemanager'
+import { HolidayConfigService } from '@/services/leavemanager'
 import { toTypedSchema, useForm, yup } from '@/plugins/validator.ts'
 
 import TextInput from '@/components/TextInput.vue'
 import AlertDialog from '@/components/AlertDialog.vue'
-import SelectInput from '@/components/SelectInput.vue'
 import TextareaInput from '@/components/TextareaInput.vue'
 import ButtonWrapper from '@/components/ButtonWrapper.vue'
 
@@ -79,30 +78,6 @@ const { t } = useI18n({
   },
 })
 
-const {
-  isFetching,
-  isLoading,
-  data: holidayTypes,
-} = useQuery({
-  queryKey: ['holidayTypes'],
-  queryFn: async () => {
-    const response = await HolidayService.getAllHolidayTypes()
-
-    if (isRequestFailed(response)) {
-      setError(response)
-      throw getErrorMessage(response)
-    }
-
-    return response.data
-  },
-  select(types) {
-    return types?.map((type) => ({
-      value: type,
-      label: `${type.name} - (${type.description})`,
-    }))
-  },
-})
-
 const openModal = ref<boolean>(false)
 const { isRequestFailed, getErrorMessage, setError } = useError()
 
@@ -152,16 +127,20 @@ const createLeaveType = handleSubmit((values) => mutate(values))
       </ButtonWrapper>
     </template>
     <template #default>
-      <form @submit="createLeaveType" class="divide-secondary-content/40 flex flex-col divide-y">
+      <form
+        @submit="createLeaveType"
+        class="divide-secondary-content/40 relative flex flex-col divide-y"
+      >
         <h1 class="px-6 py-4 text-sm font-medium">{{ t('modal.title') }}</h1>
         <div class="flex flex-col gap-2 px-6 py-4">
-          <SelectInput
-            name="type"
-            :options="holidayTypes"
-            :label="t('modal.field.type.label')"
-            :is-loading="isFetching || isLoading"
-            :placeholder="t('modal.field.type.placeholder')"
-          />
+          <div class="absolute inset-0 -z-1 opacity-0">
+            <TextInput
+              name="holidayTypeId"
+              :model-value="$route.params.id"
+              :label="t('modal.field.type.label')"
+              :placeholder="t('modal.field.type.placeholder')"
+            />
+          </div>
           <TextareaInput name="description" :label="t('modal.field.description')" />
           <div class="grid grid-cols-3 gap-4">
             <TextInput placeholder="1" name="numberOfTime" :label="t('modal.field.limit.year')" />
