@@ -14,13 +14,15 @@ import CreateHolidayType from '@/components/CreateHolidayType.vue'
 const { t } = useI18n({
   messages: {
     en: {
-      empty: 'No leave types found',
       title: 'Settings',
+      subtitle: 'Leave type',
+      empty: 'No leave types found',
       description: 'Configuration of leave types and rules',
     },
     fr: {
-      empty: 'Aucun type de congé créé',
       title: 'Paramètres',
+      subtitle: 'Type de congé',
+      empty: 'Aucun type de congé créé',
       description: 'Configuration des types et règles de congés',
     },
   },
@@ -53,6 +55,9 @@ const {
         <h1 class="font-medium">{{ t('title') }}</h1>
         <span class="text-xs">{{ t('description') }}</span>
       </PageTitle>
+    </div>
+    <div class="flex items-center justify-between">
+      <span>{{ t('subtitle') }}</span>
       <CreateHolidayType />
     </div>
     <DoraLoading v-if="isLoading || isFetching" />

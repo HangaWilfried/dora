@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useQuery } from '@tanstack/vue-query'
 
@@ -8,6 +9,8 @@ import { HolidayConfigService } from '@/services/leavemanager'
 import DoraLoading from '@/components/DoraLoading.vue'
 import CreateHolidayType from '@/components/CreateHolidayType.vue'
 import HolidayConfigCard from '@/components/HolidayConfigCard.vue'
+
+const { id } = defineProps<{ id?: number }>()
 
 const { t } = useI18n({
   messages: {
@@ -23,9 +26,17 @@ const {
   isLoading,
   isFetching,
 } = useQuery({
-  queryKey: ['holidayConfigs'],
-  queryFn: async () => {
-    const response = await HolidayConfigService.getAllHolidayConfigs()
+  queryKey: computed(() => [id, 'holidayConfigs']),
+  queryFn: async ({ queryKey }) => {
+    const [holidayTypeId] = queryKey
+
+    if (!holidayTypeId) {
+      throw new Error('Missing holidayTypeId.')
+    }
+
+    const response = await HolidayConfigService.getAllHolidayConfigByHolidayType({
+      path: { holidayTypeId: Number(holidayTypeId) },
+    })
     if (isRequestFailed(response)) {
       setError(response)
       throw getErrorMessage(response)
@@ -38,7 +49,8 @@ const {
 
 <template>
   <section class="flex flex-col gap-4">
-    <div class="flex justify-end">
+    <div class="flex items-center justify-between">
+      <span class="text-sm font-medium">Configurations</span>
       <CreateHolidayType />
     </div>
     <DoraLoading v-if="isLoading || isFetching" />

@@ -1,17 +1,43 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { HolidayConfigDTO } from '@/services/leavemanager'
 
 import ActivateConfig from '@/components/ActivateConfig.vue'
 import DeactivateConfig from '@/components/DeactivateConfig.vue'
 
-defineProps<{ holidayConfig: HolidayConfigDTO }>()
+const { holidayConfig } = defineProps<{ holidayConfig: HolidayConfigDTO }>()
+
+const { t } = useI18n({
+  useScope: 'global',
+  inheritLocale: true,
+  messages: {
+    en: {
+      time: {
+        year: '{value}x/an',
+        day: '{value} jours',
+      },
+    },
+    fr: {
+      time: {
+        year: '{value}x/an',
+        day: '{value} jours',
+      },
+    },
+  },
+})
+
+const dayInterval = computed(() => `${holidayConfig.minimumOfDays}-${holidayConfig.maximumOfDays}`)
 </script>
 
 <template>
-  <div class="text-secondary-content card flex flex-row items-start justify-between text-xs">
+  <div class="card flex flex-row items-start justify-between text-xs">
     <div class="flex flex-col gap-2">
       <h1 class="text-base-content text-sm font-medium">{{ holidayConfig.description }}</h1>
-      <div class="flex items-center gap-8"></div>
+      <div class="text-secondary-content flex items-center gap-8">
+        <span>{{ t('time.year', { value: dayInterval }) }}</span>
+        <span>{{ t('time.day', { value: holidayConfig.minimumOfDays }) }}</span>
+      </div>
     </div>
     <div class="flex items-center gap-2">
       <DeactivateConfig v-if="holidayConfig.isActivate" :holiday-config-id="holidayConfig.id" />

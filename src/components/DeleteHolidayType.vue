@@ -77,8 +77,9 @@ const { mutate: deleteHolidayType, isPending } = useMutation({
 <template>
   <AlertDialog v-model:open="openModal">
     <template #trigger>
-      <ButtonWrapper class="btn-square btn-ghost tooltip" :data-tip="t('tooltip')">
-        <Trash2 class="text-error size-5 stroke-2" />
+      <ButtonWrapper class="btn-outline btn-error">
+        <Trash2 class="size-5 stroke-2" />
+        <span>{{ t('tooltip') }}</span>
       </ButtonWrapper>
     </template>
     <div class="flex flex-col gap-4 p-6">
