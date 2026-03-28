@@ -28,9 +28,10 @@ const { t } = useI18n({
 const { isRequestFailed, getErrorMessage, setError } = useError()
 
 const {
-  data: holidayConfigs,
   isLoading,
   isFetching,
+  data: holidayConfigs,
+  refetch: refetchConfigs,
 } = useQuery({
   queryKey: computed(() => [id, 'holidayConfigs']),
   queryFn: async ({ queryKey }) => {
@@ -62,9 +63,10 @@ const {
     <DoraLoading v-if="isLoading || isFetching" />
     <div v-else-if="holidayConfigs && holidayConfigs.length" class="space-y-2">
       <HolidayConfigCard
-        v-for="config in holidayConfigs"
         :key="config.id"
         :holiday-config="config"
+        :refetch-config="refetchConfigs"
+        v-for="config in holidayConfigs"
       />
     </div>
     <span v-else class="font-italic text-sm">{{ t('empty') }}</span>

@@ -22,9 +22,9 @@ const { value, errorMessage } = useField(() => name, undefined, { syncVModel: tr
       :name="name"
       :type="type"
       v-model="value"
-      class="input w-full"
       :disabled="disabled"
       :placeholder="placeholder"
+      class="input disabled:bg-neutral disabled:border-secondary-content/20 w-full"
     />
     <FieldError :error="errorMessage" />
   </div>

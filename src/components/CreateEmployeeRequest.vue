@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
-import { UserPlus } from 'lucide-vue-next'
+import { Check, Copy, UserPlus } from 'lucide-vue-next'
 import { AlertDialogCancel } from 'reka-ui'
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
 
@@ -63,6 +63,8 @@ const { t, locale } = useI18n({
         btn: {
           cancel: 'Cancel',
           save: 'Save',
+          copy: 'Copy credentials',
+          copied: 'Copied!',
         },
       },
     },
@@ -110,6 +112,8 @@ const { t, locale } = useI18n({
         btn: {
           cancel: 'Annuler',
           save: 'Enregistrer',
+          copy: 'Copier les identifiants',
+          copied: 'Copié !',
         },
       },
     },
@@ -142,7 +146,7 @@ const schema = yup.object({
 
 type EmployeePayload = yup.InferType<typeof schema>
 
-const { handleSubmit } = useForm({
+const { handleSubmit, values, meta } = useForm({
   validationSchema: toTypedSchema(schema),
 })
 
@@ -165,6 +169,15 @@ const { mutate, isPending } = useMutation({
 })
 
 const createEmployee = handleSubmit((values) => mutate(values))
+
+const copied = ref(false)
+
+async function copyCredentials() {
+  const text = `Email: ${values.email}\nPassword: ${values.password}`
+  await navigator.clipboard.writeText(text)
+  copied.value = true
+  setTimeout(() => (copied.value = false), 2000)
+}
 </script>
 
 <template>
@@ -212,6 +225,16 @@ const createEmployee = handleSubmit((values) => mutate(values))
           />
         </div>
         <div class="mt-2 flex items-center justify-end gap-2 px-6 py-4">
+          <ButtonWrapper
+            v-if="meta.valid"
+            type="button"
+            class="btn-warning mb-1 gap-2 self-end"
+            @click="copyCredentials"
+          >
+            <Check v-if="copied" class="size-4" />
+            <Copy v-else class="size-4" />
+            {{ copied ? t('modal.btn.copied') : t('modal.btn.copy') }}
+          </ButtonWrapper>
           <AlertDialogCancel class="btn btn-outline px-8">
             {{ t('modal.btn.cancel') }}
           </AlertDialogCancel>

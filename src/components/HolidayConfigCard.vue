@@ -6,7 +6,10 @@ import type { HolidayConfigDTO } from '@/services/leavemanager'
 import ActivateConfig from '@/components/ActivateConfig.vue'
 import DeactivateConfig from '@/components/DeactivateConfig.vue'
 
-const { holidayConfig } = defineProps<{ holidayConfig: HolidayConfigDTO }>()
+const { holidayConfig } = defineProps<{
+  refetchConfig: VoidFunction
+  holidayConfig: HolidayConfigDTO
+}>()
 
 const { t } = useI18n({
   useScope: 'global',
@@ -40,8 +43,12 @@ const dayInterval = computed(() => `${holidayConfig.minimumOfDays}-${holidayConf
       </div>
     </div>
     <div class="flex items-center gap-2">
-      <DeactivateConfig v-if="holidayConfig.isActivate" :holiday-config-id="holidayConfig.id" />
-      <ActivateConfig v-else :holiday-config-id="holidayConfig.id" />
+      <DeactivateConfig
+        v-if="holidayConfig.isActivate"
+        :holiday-config-id="holidayConfig.id"
+        :refetchConfig="refetchConfig"
+      />
+      <ActivateConfig v-else :holiday-config-id="holidayConfig.id" :refetchConfig="refetchConfig" />
     </div>
   </div>
 </template>

@@ -7,6 +7,15 @@ type JwtPayload = {
   email?: string
   lastname?: string
   firstname?: string
+
+  /*
+  {
+  "scopes": "SUPER_ADMIN",
+  "sub": "admin@example.com",
+  "iat": 1774693577,
+  "exp": 1774915200
+}
+  * */
 }
 
 export const useAuth = () => {

@@ -72,8 +72,11 @@ const { mutate: deleteEmployee, isPending } = useMutation({
 <template>
   <AlertDialog v-model:open="openModal">
     <template #trigger>
-      <ButtonWrapper class="btn-ghost btn-square btn-sm tooltip" :data-tip="t('delete')">
-        <Trash2 class="text-error size-4 stroke-2" />
+      <ButtonWrapper
+        class="btn-outline btn-error btn-square btn-sm tooltip"
+        :data-tip="t('delete')"
+      >
+        <Trash2 class="size-4" />
       </ButtonWrapper>
     </template>
     <div class="flex flex-col gap-4 p-6">
@@ -85,7 +88,7 @@ const { mutate: deleteEmployee, isPending } = useMutation({
         <AlertDialogCancel class="btn btn-outline px-8">
           {{ t('modal.cancel') }}
         </AlertDialogCancel>
-        <ButtonWrapper @click="deleteEmployee" :is-loading="isPending" class="btn-primary px-8">
+        <ButtonWrapper @click="deleteEmployee" :is-loading="isPending" class="btn-error px-8">
           {{ t('modal.confirm') }}
         </ButtonWrapper>
       </div>

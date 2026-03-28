@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
+import { Ellipsis } from 'lucide-vue-next'
 import { AlertDialogCancel } from 'reka-ui'
-import { Ellipsis, Copy, Check } from 'lucide-vue-next'
+import { useQuery } from '@tanstack/vue-query'
 
 import { useForm } from '@/plugins/validator.ts'
-import { type EmployeeDTO } from '@/services/leavemanager'
+import { useError } from '@/composables/useError.ts'
+import { type EmployeeDTO, EmployeeService } from '@/services/leavemanager'
 
 import TextInput from '@/components/TextInput.vue'
-import SelectInput from '@/components/SelectInput.vue'
 import AlertDialog from '@/components/AlertDialog.vue'
+import DoraLoading from '@/components/DoraLoading.vue'
+import SelectInput from '@/components/SelectInput.vue'
 import ButtonWrapper from '@/components/ButtonWrapper.vue'
 
 const { employee } = defineProps<{ employee: EmployeeDTO }>()
@@ -33,8 +36,6 @@ const { t } = useI18n({
         },
         btn: {
           cancel: 'Close',
-          copy: 'Copy credentials',
-          copied: 'Copied!',
         },
       },
     },
@@ -56,15 +57,13 @@ const { t } = useI18n({
         },
         btn: {
           cancel: 'Fermer',
-          copy: 'Copier les identifiants',
-          copied: 'Copié !',
         },
       },
     },
   },
 })
 
-useForm({
+const { resetForm } = useForm({
   initialValues: {
     role: employee.role,
     email: employee.email,
@@ -74,32 +73,54 @@ useForm({
   },
 })
 
+const open = ref<boolean>(false)
+const { isRequestFailed, getErrorMessage, setError } = useError()
+
+const { isLoading, isFetching } = useQuery({
+  queryKey: [employee.id, 'user-password'],
+  queryFn: async ({ queryKey }) => {
+    const employeeId = Number(queryKey[0])
+
+    const response = await EmployeeService.getEmployeeById({
+      path: { employeeId },
+    })
+    if (isRequestFailed(response)) {
+      setError(response)
+      throw getErrorMessage(response)
+    }
+
+    const employeeDetails = response.data
+    if (employeeDetails) {
+      resetForm({
+        values: employeeDetails,
+      })
+    }
+    return employeeDetails
+  },
+  enabled: computed(() => open.value),
+})
+
 const roles = computed(() => {
   return [
     { label: t('role.MANAGER'), value: 'ADMIN' },
     { label: t('role.EMPLOYEE'), value: 'EMPLOYEE' },
   ]
 })
-
-const copied = ref(false)
-
-async function copyCredentials() {
-  const text = `Email: ${employee.email}\nPassword: ${employee.password}`
-  await navigator.clipboard.writeText(text)
-  copied.value = true
-  setTimeout(() => (copied.value = false), 2000)
-}
 </script>
 
 <template>
-  <AlertDialog>
+  <AlertDialog v-model:open="open">
     <template #trigger>
-      <ButtonWrapper class="btn-ghost btn-square btn-sm tooltip" :data-tip="t('tooltip')">
-        <Ellipsis class="text-secondary/40 size-4 stroke-2" />
+      <ButtonWrapper
+        class="btn-outline btn-secondary btn-square btn-sm tooltip"
+        :data-tip="t('tooltip')"
+      >
+        <Ellipsis class="text-secondary-content/60 size-4" />
       </ButtonWrapper>
     </template>
     <template #default>
-      <form class="space-y-5 p-4">
+      <DoraLoading v-if="isFetching || isLoading" />
+      <form v-else class="space-y-5 p-4">
         <div class="grid grid-cols-2 items-center gap-2">
           <TextInput
             name="lastname"
@@ -119,12 +140,6 @@ async function copyCredentials() {
             :label="t('modal.field.email.label')"
             :placeholder="t('modal.field.email.placeholder')"
           />
-          <TextInput
-            name="password"
-            :disabled="true"
-            :label="t('modal.field.password.label')"
-            :placeholder="t('modal.field.password.placeholder')"
-          />
           <SelectInput
             name="role"
             :options="roles"
@@ -134,12 +149,7 @@ async function copyCredentials() {
           />
         </div>
         <div class="flex items-center justify-end gap-2">
-          <ButtonWrapper type="button" class="btn-outline gap-2" @click="copyCredentials">
-            <Check v-if="copied" class="size-4" />
-            <Copy v-else class="size-4" />
-            {{ copied ? t('modal.btn.copied') : t('modal.btn.copy') }}
-          </ButtonWrapper>
-          <AlertDialogCancel class="btn btn-outline px-8">
+          <AlertDialogCancel class="btn btn-primary btn-outline px-8">
             {{ t('modal.btn.cancel') }}
           </AlertDialogCancel>
         </div>

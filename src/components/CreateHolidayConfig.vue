@@ -82,12 +82,10 @@ const openModal = ref<boolean>(false)
 const { isRequestFailed, getErrorMessage, setError } = useError()
 
 const schema = yup.object({
-  name: yup.string().required('required_lbl'),
   description: yup.string().optional(),
   numberOfTime: yup.number().optional(),
   minimumOfDays: yup.number().optional(),
   maximumOfDays: yup.number().optional(),
-  isActivate: yup.boolean().optional(),
   holidayTypeId: yup.number().optional(),
 })
 
@@ -141,7 +139,11 @@ const createLeaveType = handleSubmit((values) => mutate(values))
               :placeholder="t('modal.field.type.placeholder')"
             />
           </div>
-          <TextareaInput name="description" :label="t('modal.field.description')" />
+          <TextareaInput
+            name="description"
+            :label="t('modal.field.description.label')"
+            :placeholder="t('modal.field.description.placeholder')"
+          />
           <div class="grid grid-cols-3 gap-4">
             <TextInput placeholder="1" name="numberOfTime" :label="t('modal.field.limit.year')" />
             <TextInput

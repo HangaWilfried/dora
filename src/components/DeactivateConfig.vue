@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { AlertDialogCancel } from 'reka-ui'
 import { ToggleRight } from 'lucide-vue-next'
-import { useMutation, useQueryClient } from '@tanstack/vue-query'
+import { useMutation } from '@tanstack/vue-query'
 
 import { toast } from '@/plugins/toast.ts'
 import { useError } from '@/composables/useError.ts'
@@ -12,11 +12,12 @@ import { HolidayConfigService } from '@/services/leavemanager'
 import AlertDialog from '@/components/AlertDialog.vue'
 import ButtonWrapper from '@/components/ButtonWrapper.vue'
 
-const { holidayConfigId } = defineProps<{ holidayConfigId?: number }>()
+const { holidayConfigId, refetchConfig } = defineProps<{
+  holidayConfigId?: number
+  refetchConfig: VoidFunction
+}>()
 
 const { t } = useI18n({
-  useScope: 'global',
-  inheritLocale: true,
   messages: {
     en: {
       tooltip: 'Deactivate',
@@ -47,7 +48,6 @@ const { t } = useI18n({
   },
 })
 
-const queryClient = useQueryClient()
 const openModal = ref<boolean>(false)
 const { isRequestFailed, getErrorMessage, setError } = useError()
 
@@ -71,7 +71,7 @@ const { mutate: deactivateHolidayConfig, isPending } = useMutation({
   onSuccess: () => {
     openModal.value = false
     toast.success(t('toast.success'))
-    queryClient.invalidateQueries({ queryKey: ['holidayTypes'] })
+    refetchConfig()
   },
 })
 </script>

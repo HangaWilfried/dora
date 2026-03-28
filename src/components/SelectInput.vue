@@ -7,6 +7,7 @@ const { name, options = [] } = defineProps<{
   name: string
   label?: string
   isLoading?: boolean
+  disabled?: boolean
   placeholder?: string
   modelValue?: unknown
   options?: Array<{ value: unknown; label: string }>
@@ -25,8 +26,8 @@ const { value, errorMessage } = useField(() => name, undefined, { syncVModel: tr
       :id="name"
       :name="name"
       v-model="value"
-      :disabled="isLoading"
-      class="select disabled:bg-secondary w-full"
+      :disabled="isLoading || disabled"
+      class="select disabled:bg-neutral disabled:border-secondary-content/20 w-full"
     >
       <option selected disabled value="">{{ placeholder }}</option>
       <option v-for="option in options" :key="option.label" :value="option.value">

@@ -15,8 +15,6 @@ import { useI18n } from 'vue-i18n'
 const { holidayTypeId } = defineProps<{ holidayTypeId?: number }>()
 
 const { t } = useI18n({
-  useScope: 'global',
-  inheritLocale: true,
   messages: {
     en: {
       tooltip: 'Delete',
@@ -91,7 +89,7 @@ const { mutate: deleteHolidayType, isPending } = useMutation({
         <AlertDialogCancel class="btn btn-outline px-8">
           {{ t('modal.cancel') }}
         </AlertDialogCancel>
-        <ButtonWrapper @click="deleteHolidayType" :is-loading="isPending" class="btn-primary px-8">
+        <ButtonWrapper @click="deleteHolidayType" :is-loading="isPending" class="btn-error px-8">
           {{ t('modal.confirm') }}
         </ButtonWrapper>
       </div>
