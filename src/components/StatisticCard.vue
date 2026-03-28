@@ -13,7 +13,7 @@ const { theme = 'primary' } = defineProps<{
   <div class="card flex flex-row items-center justify-between gap-2">
     <div class="flex flex-col gap-2">
       <h2>{{ label }}</h2>
-      <span class="text-xl font-bold">{{ value }}</span>
+      <span class="text-xl font-medium">{{ value }}</span>
     </div>
     <div :class="['flex items-center justify-center rounded-lg p-2', theme]">
       <component class="size-5 text-current" :is="icon" />
