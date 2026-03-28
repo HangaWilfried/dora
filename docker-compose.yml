@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   api:
     image: herman87/leavemanager:0.0.1-SNAPSHOT
@@ -41,8 +39,9 @@ services:
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 10s
-      timeout: 5s
-      retries: 5
+      timeout: 30s
+      retries: 10
+      start_period: 60s
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: leavemanager-phpmyadmin
