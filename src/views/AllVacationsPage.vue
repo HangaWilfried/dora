@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { computed, reactive } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 
 import { useError } from '@/composables/useError'
@@ -9,34 +10,17 @@ import PageTitle from '@/components/PageTitle.vue'
 import DoraLoading from '@/components/DoraLoading.vue'
 import BaseContainer from '@/components/BaseContainer.vue'
 import HolidayFilters from '@/components/HolidayFilters.vue'
+import HolidaysTable from '@/components/HolidaysTable.vue'
 
 const { t } = useI18n({
   messages: {
     en: {
       title: 'All leaves',
-      empty: 'No leave requests created',
       description: 'Manage employee leave requests',
-      table: {
-        employee: 'Employee',
-        title: 'Title',
-        type: 'Type',
-        period: 'Period',
-        status: 'Status',
-        actions: 'Actions',
-      },
     },
     fr: {
       title: 'Tous les congés',
-      empty: 'Aucune requête de congé créée',
       description: 'Gérez les demandes de congés des employés',
-      table: {
-        employee: 'Employé',
-        title: 'Titre',
-        type: 'Type',
-        period: 'Période',
-        status: 'Statut',
-        actions: 'Actions',
-      },
     },
   },
 })
@@ -59,6 +43,17 @@ const {
     return response.data
   },
 })
+
+const searchCriteria = reactive({
+  queryString: '',
+  status: '',
+})
+const filteredHolidays = computed(() => {
+  if (holidays.value) {
+  }
+
+  return []
+})
 </script>
 
 <template>
@@ -67,11 +62,9 @@ const {
       <h1 class="font-medium">{{ t('title') }}</h1>
       <span class="text-xs">{{ t('description') }}</span>
     </PageTitle>
-    <HolidayFilters />
+    <HolidayFilters v-model="searchCriteria" />
     <DoraLoading v-if="isLoading || isFetching" />
-    <div v-else-if="holidays && holidays.length" class="space-y-2">
-      <!--      display table here -->
-    </div>
+    <HolidaysTable v-else-if="filteredHolidays.length" :holidays="filteredHolidays" />
     <span v-else class="font-italic text-sm">{{ t('empty') }}</span>
   </BaseContainer>
 </template>

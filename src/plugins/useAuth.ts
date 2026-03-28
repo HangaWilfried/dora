@@ -3,20 +3,19 @@ import { dayjs } from '@/plugins/date.ts'
 import { setClientToken } from '@/plugins/clients.ts'
 
 type JwtPayload = {
-  exp?: number
-  email?: string
-  lastname?: string
-  firstname?: string
+  scopes: string
+  sub: string
+  exp: number
+}
 
-  /*
-  {
-  "scopes": "SUPER_ADMIN",
-  "sub": "admin@example.com",
-  "iat": 1774693577,
-  "exp": 1774915200
-}
-  * */
-}
+type UserInfo =
+  | {
+      isNull: false
+      exp: number
+      email: string
+      role: string
+    }
+  | { isNull: true }
 
 export const useAuth = () => {
   const setToken = (token?: string) => {
@@ -29,14 +28,16 @@ export const useAuth = () => {
     setClientToken()
   }
 
-  const getUserInfo = () => {
+  const getUserInfo = (): UserInfo => {
     const token = localStorage.getItem('token')
     if (token) {
       const user = jwtDecode<JwtPayload>(token)
 
       return {
-        ...user,
         isNull: false,
+        exp: user.exp,
+        email: user.sub,
+        role: user.scopes,
       }
     }
 
@@ -46,14 +47,14 @@ export const useAuth = () => {
   }
 
   const isAuthenticated = (): boolean => {
-    const { isNull, exp } = getUserInfo()
+    const userInfo = getUserInfo()
 
-    if (isNull) {
+    if (userInfo.isNull) {
       return false
     }
 
-    if (exp) {
-      const isValid = dayjs().isBefore(dayjs(exp * 1000))
+    if (userInfo.exp) {
+      const isValid = dayjs().isBefore(dayjs(userInfo.exp * 1000))
 
       if (!isValid) {
         clearToken()

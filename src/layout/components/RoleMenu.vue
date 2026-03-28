@@ -1,23 +1,14 @@
 <script setup lang="ts">
-import {
-  LogOut,
-  Users2,
-  Settings,
-  CalendarDays,
-  CalendarRange,
-  LayoutDashboard,
-} from 'lucide-vue-next'
+import { Users2, Settings, CalendarDays, CalendarRange, LayoutDashboard } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
-import { useAuth } from '@/plugins/useAuth.ts'
-import AppLogo from '@/components/AppLogo.vue'
 
-const authState = useAuth()
-const user = authState.getUserInfo()
+import AppLogo from '@/components/AppLogo.vue'
+import UserProfile from '@/layout/components/UserProfile.vue'
+import CloseSession from '@/layout/components/CloseSession.vue'
 
 const { t } = useI18n({
   messages: {
     en: {
-      logout: 'Logout',
       settings: 'Settings',
       dashboard: 'Dashboard',
       vacations: 'Vacations',
@@ -28,7 +19,6 @@ const { t } = useI18n({
       vacations: 'Congés',
       employees: 'Employés',
       settings: 'Paramètres',
-      logout: 'Se déconnecter',
       myVacations: 'Mes congés',
       dashboard: 'Tableau de bord',
     },
@@ -74,7 +64,7 @@ const menus = [
     <div class="p-4">
       <AppLogo />
     </div>
-    <ul class="menu w-full grow p-4">
+    <ul class="menu w-full grow space-y-2 p-4">
       <li v-for="menu in menus" :key="menu.name">
         <RouterLink
           :to="menu.path"
@@ -87,20 +77,9 @@ const menus = [
         </RouterLink>
       </li>
     </ul>
-    <ul class="menu w-full">
-      <li class="flex flex-col gap-2">
-        <span>{{ user.lastname }}</span>
-        <span>{{ user.email }}</span>
-      </li>
-      <li @click="authState.logout">
-        <button
-          class="is-drawer-close:tooltip is-drawer-close:tooltip-right btn btn-info"
-          data-tip="Logout"
-        >
-          <LogOut class="size-4" />
-          <span class="is-drawer-close:hidden">{{ t('logout') }}</span>
-        </button>
-      </li>
+    <ul class="menu w-full py-4">
+      <UserProfile />
+      <CloseSession />
     </ul>
   </div>
 </template>

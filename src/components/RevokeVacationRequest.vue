@@ -54,7 +54,7 @@ const { mutate: publishHoliday, isPending } = useMutation({
       throw new Error('Missing holiday id')
     }
 
-    const response = await HolidayService.publishHoliday({ path: { holidayId } })
+    const response = await HolidayService.unpublishedHoliday({ path: { holidayId } })
 
     if (isRequestFailed(response)) {
       setError(response)
