@@ -15,8 +15,6 @@ import ButtonWrapper from '@/components/ButtonWrapper.vue'
 const { holidayId } = defineProps<{ holidayId?: number }>()
 
 const { t } = useI18n({
-  useScope: 'global',
-  inheritLocale: true,
   messages: {
     en: {
       tooltip: 'Reject',
@@ -77,8 +75,8 @@ const { mutate: rejectHolidayRequest, isPending } = useMutation({
 <template>
   <AlertDialog v-model:open="openModal">
     <template #trigger>
-      <ButtonWrapper class="btn-square btn-ghost tooltip" :data-tip="t('tooltip')">
-        <X class="text-error size-5 stroke-2" />
+      <ButtonWrapper class="btn-xs btn-square btn-error btn-ghost tooltip" :data-tip="t('tooltip')">
+        <X class="size-5 stroke-2" />
       </ButtonWrapper>
     </template>
     <div class="flex flex-col gap-4 p-6">
@@ -90,11 +88,7 @@ const { mutate: rejectHolidayRequest, isPending } = useMutation({
         <AlertDialogCancel class="btn btn-outline px-8">
           {{ t('modal.cancel') }}
         </AlertDialogCancel>
-        <ButtonWrapper
-          @click="rejectHolidayRequest"
-          :is-loading="isPending"
-          class="btn-primary px-8"
-        >
+        <ButtonWrapper @click="rejectHolidayRequest" :is-loading="isPending" class="btn-error px-8">
           {{ t('modal.confirm') }}
         </ButtonWrapper>
       </div>

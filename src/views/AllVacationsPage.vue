@@ -15,10 +15,12 @@ import HolidaysTable from '@/components/HolidaysTable.vue'
 const { t } = useI18n({
   messages: {
     en: {
+      empty: 'No leave requests found',
       title: 'All leaves',
       description: 'Manage employee leave requests',
     },
     fr: {
+      empty: 'Aucune demande de congé trouvée',
       title: 'Tous les congés',
       description: 'Gérez les demandes de congés des employés',
     },
@@ -48,11 +50,25 @@ const searchCriteria = reactive({
   queryString: '',
   status: '',
 })
+
 const filteredHolidays = computed(() => {
-  if (holidays.value) {
+  if (!holidays.value) {
+    return []
   }
 
-  return []
+  return holidays.value.filter((holiday) => {
+    const matchesQuery =
+      !searchCriteria.queryString ||
+      holiday.title?.toLowerCase().includes(searchCriteria.queryString.toLowerCase()) ||
+      `${holiday.createdBy?.firstname} ${holiday.createdBy?.lastname}`
+        .toLowerCase()
+        .includes(searchCriteria.queryString.toLowerCase()) ||
+      holiday.type?.name?.toLowerCase().includes(searchCriteria.queryString.toLowerCase())
+
+    const matchesStatus = !searchCriteria.status || holiday.status === searchCriteria.status
+
+    return matchesQuery && matchesStatus
+  })
 })
 </script>
 

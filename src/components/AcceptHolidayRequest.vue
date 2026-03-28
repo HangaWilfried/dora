@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Check } from 'lucide-vue-next'
 import { AlertDialogCancel } from 'reka-ui'
-import { ToggleLeft } from 'lucide-vue-next'
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
 
 import { toast } from '@/plugins/toast.ts'
@@ -15,8 +15,6 @@ import ButtonWrapper from '@/components/ButtonWrapper.vue'
 const { holidayId } = defineProps<{ holidayId?: number }>()
 
 const { t } = useI18n({
-  useScope: 'global',
-  inheritLocale: true,
   messages: {
     en: {
       tooltip: 'Approve',
@@ -77,8 +75,11 @@ const { mutate: acceptHolidayRequest, isPending } = useMutation({
 <template>
   <AlertDialog v-model:open="openModal">
     <template #trigger>
-      <ButtonWrapper class="btn-square btn-ghost tooltip" :data-tip="t('tooltip')">
-        <ToggleLeft class="text-secondary-content/60 size-5 stroke-2" />
+      <ButtonWrapper
+        class="btn-xs btn-square btn-success btn-ghost tooltip"
+        :data-tip="t('tooltip')"
+      >
+        <Check class="size-5 stroke-2" />
       </ButtonWrapper>
     </template>
     <div class="flex flex-col gap-4 p-6">
@@ -93,7 +94,7 @@ const { mutate: acceptHolidayRequest, isPending } = useMutation({
         <ButtonWrapper
           @click="acceptHolidayRequest"
           :is-loading="isPending"
-          class="btn-primary px-8"
+          class="btn-success px-8"
         >
           {{ t('modal.confirm') }}
         </ButtonWrapper>
