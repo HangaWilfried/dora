@@ -7,6 +7,7 @@ import HolidayStatus from '@/components/HolidayStatus.vue'
 import EditVacationRequest from '@/components/EditVacationRequest.vue'
 import SubmitVacationRequest from '@/components/SubmitVacationRequest.vue'
 import DeleteVacationRequest from '@/components/DeleteVacationRequest.vue'
+import RevokeVacationRequest from '@/components/RevokeVacationRequest.vue'
 
 defineProps<{ holiday: HolidayDTO }>()
 </script>
@@ -27,8 +28,11 @@ defineProps<{ holiday: HolidayDTO }>()
       <span>{{ holiday.description }}</span>
     </div>
     <div class="flex items-center gap-2">
-      <SubmitVacationRequest :holiday-id="holiday.id" />
-      <EditVacationRequest :holiday="holiday" />
+      <template v-if="holiday.status === 'DRAFT'">
+        <SubmitVacationRequest :holiday-id="holiday.id" />
+        <EditVacationRequest :holiday="holiday" />
+      </template>
+      <RevokeVacationRequest :holiday-id="holiday.id" />
       <DeleteVacationRequest :holiday-id="holiday.id" />
     </div>
   </div>
