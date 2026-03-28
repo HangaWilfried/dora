@@ -6,6 +6,14 @@ type Exception = {
   error: unknown
 }
 
+type ApiErrorResponse = {
+  path: string
+  error: string
+  status: number
+  message: string
+  timestamp: string
+}
+
 export const useError = () => {
   const session = useSessionStore()
   const { t } = useI18n({
@@ -46,7 +54,10 @@ export const useError = () => {
         return exception.error
       }
 
-      return Object.values(exception.error).filter(Boolean)[0] ?? t('errors.unknownError')
+      const error = exception.error as ApiErrorResponse
+      const message = error.message ?? error.error
+
+      return message ?? t('errors.unknownError')
     }
     if (exception.status) return t(errorMap[exception.status] || 'errors.unknownError')
     return t('errors.unknownError')
