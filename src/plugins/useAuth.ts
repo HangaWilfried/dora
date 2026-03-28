@@ -17,6 +17,8 @@ type UserInfo =
     }
   | { isNull: true }
 
+type RoleType = 'EMPLOYEE' | 'ADMIN' | 'SUPER_ADMIN'
+
 export const useAuth = () => {
   const setToken = (token?: string) => {
     setClientToken(token)
@@ -79,6 +81,17 @@ export const useAuth = () => {
     window.location.href = `${window.location.origin}/login`
   }
 
+  const hasRole = (requiredRoles: RoleType | RoleType[]): boolean => {
+    const userInfo = getUserInfo()
+
+    if (userInfo.isNull) {
+      return false
+    }
+
+    const roles = Array.isArray(requiredRoles) ? requiredRoles : [requiredRoles]
+    return roles.includes(userInfo.role as RoleType)
+  }
+
   return {
     logout,
     setToken,
@@ -86,5 +99,6 @@ export const useAuth = () => {
     clearToken,
     getUserInfo,
     isAuthenticated,
+    hasRole,
   }
 }

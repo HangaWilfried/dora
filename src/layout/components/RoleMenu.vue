@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { Users2, Settings, CalendarDays, CalendarRange, LayoutDashboard } from 'lucide-vue-next'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Users2, Settings, CalendarDays, CalendarRange, LayoutDashboard } from 'lucide-vue-next'
+
+import { useAuth } from '@/plugins/useAuth'
 
 import AppLogo from '@/components/AppLogo.vue'
 import UserProfile from '@/layout/components/UserProfile.vue'
@@ -25,33 +28,50 @@ const { t } = useI18n({
   },
 })
 
-const menus = [
+const { hasRole } = useAuth()
+
+const allMenus = [
   {
     path: '/',
     name: 'dashboard',
     icon: LayoutDashboard,
+    requiredRoles: undefined,
   },
   {
     path: '/vacations',
     name: 'vacations',
     icon: CalendarRange,
+    requiredRoles: ['ADMIN', 'SUPER_ADMIN'],
   },
   {
     path: '/me/vacations',
     name: 'myVacations',
     icon: CalendarDays,
+    requiredRoles: ['EMPLOYEE', 'ADMIN'],
   },
   {
     path: '/employees',
     name: 'employees',
     icon: Users2,
+    requiredRoles: undefined,
   },
   {
     path: '/settings',
     name: 'settings',
     icon: Settings,
+    requiredRoles: ['SUPER_ADMIN'],
   },
 ]
+
+const menus = computed(() => {
+  return allMenus.filter((menu) => {
+    if (!menu.requiredRoles) {
+      return true
+    }
+
+    return hasRole(menu.requiredRoles as never)
+  })
+})
 </script>
 
 <template>
