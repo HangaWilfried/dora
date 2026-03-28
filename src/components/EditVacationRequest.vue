@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { ref, computed } from 'vue'
 import { Pencil } from 'lucide-vue-next'
 import { AlertDialogCancel } from 'reka-ui'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
@@ -15,8 +15,8 @@ import AlertDialog from '@/components/AlertDialog.vue'
 import SelectInput from '@/components/SelectInput.vue'
 import ButtonWrapper from '@/components/ButtonWrapper.vue'
 import TextareaInput from '@/components/TextareaInput.vue'
-import HolidayConfigInfo from '@/components/HolidayConfigInfo.vue'
 import ScaleTransition from '@/components/ScaleTransition.vue'
+import HolidayConfigInfo from '@/components/HolidayConfigInfo.vue'
 
 const { holiday } = defineProps<{ holiday: HolidayDTO }>()
 
@@ -127,6 +127,7 @@ const {
       label: `${type.name} (${type.description})`,
     }))
   },
+  enabled: computed(() => openModal.value),
 })
 
 const { mutate, isPending } = useMutation({
@@ -160,8 +161,11 @@ const editLeaveRequest = handleSubmit((values) => mutate(values))
 <template>
   <AlertDialog v-model:open="openModal">
     <template #trigger>
-      <ButtonWrapper class="btn-square btn-ghost tooltip" :data-tip="t('tooltip')">
-        <Pencil class="size-5 stroke-2" />
+      <ButtonWrapper
+        class="btn-square btn-xs btn-primary btn-outline tooltip"
+        :data-tip="t('tooltip')"
+      >
+        <Pencil class="text-primary size-4 stroke-2" />
       </ButtonWrapper>
     </template>
     <template #default>

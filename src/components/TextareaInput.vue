@@ -19,7 +19,7 @@ const { value, errorMessage } = useField<string>(() => name, undefined, { syncVM
       :name="name"
       v-model="value"
       :placeholder="placeholder"
-      class="textarea h-20 w-full resize-none"
+      class="textarea disabled:bg-neutral disabled:border-secondary-content/20 h-20 w-full resize-none"
     ></textarea>
     <FieldError :error="errorMessage" />
   </div>

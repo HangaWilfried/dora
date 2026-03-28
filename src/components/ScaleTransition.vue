@@ -13,6 +13,6 @@
 .v-enter-from,
 .v-leave-to {
   opacity: 0;
-  transform: scale(0);
+  height: 0;
 }
 </style>

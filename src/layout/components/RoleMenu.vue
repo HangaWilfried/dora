@@ -1,7 +1,14 @@
 <script setup lang="ts">
+import {
+  LogOut,
+  Users2,
+  Settings,
+  CalendarDays,
+  CalendarRange,
+  LayoutDashboard,
+} from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
 import { useAuth } from '@/plugins/useAuth.ts'
-import { LogOut, Users2, CalendarDays, Settings, LayoutDashboard } from 'lucide-vue-next'
 import AppLogo from '@/components/AppLogo.vue'
 
 const authState = useAuth()
@@ -11,17 +18,19 @@ const { t } = useI18n({
   messages: {
     en: {
       logout: 'Logout',
+      settings: 'Settings',
       dashboard: 'Dashboard',
       vacations: 'Vacations',
       employees: 'Employees',
-      settings: 'Settings',
+      myVacations: 'My vacations',
     },
     fr: {
-      logout: 'Se déconnecter',
-      dashboard: 'Tableau de bord',
       vacations: 'Congés',
       employees: 'Employés',
       settings: 'Paramètres',
+      logout: 'Se déconnecter',
+      myVacations: 'Mes congés',
+      dashboard: 'Tableau de bord',
     },
   },
 })
@@ -35,6 +44,11 @@ const menus = [
   {
     path: '/vacations',
     name: 'vacations',
+    icon: CalendarRange,
+  },
+  {
+    path: '/me/vacations',
+    name: 'myVacations',
     icon: CalendarDays,
   },
   {

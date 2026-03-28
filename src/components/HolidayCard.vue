@@ -18,7 +18,7 @@ defineProps<{ holiday: HolidayDTO }>()
         <span class="text-base-content text-sm font-medium">{{ holiday.title }}</span>
         <HolidayStatus :status="holiday.status" />
       </div>
-      <span>{{ holiday.type }}</span>
+      <span>{{ holiday.type?.name }}</span>
       <div class="flex items-center gap-0.5">
         <span>{{ getLocaleDate(holiday.period?.startDate) }}</span>
         <MoveRight class="size-4" />

@@ -37,34 +37,34 @@ const statuses = computed(() => {
   return [
     {
       label: t('ALL'),
-      value: null,
+      value: '',
     },
     {
-      label: t('holidayStatus.DRAFT'),
+      label: t('DRAFT'),
       value: 'DRAFT',
     },
     {
-      label: t('holidayStatus.PUBLISH'),
+      label: t('PUBLISH'),
       value: 'PUBLISH',
     },
     {
-      label: t('holidayStatus.APPROVED'),
+      label: t('APPROVED'),
       value: 'APPROVED',
     },
     {
-      label: t('holidayStatus.VALIDATED'),
+      label: t('VALIDATED'),
       value: 'VALIDATED',
     },
     {
-      label: t('holidayStatus.REFUSED'),
+      label: t('REFUSED'),
       value: 'REFUSED',
     },
     {
-      label: t('holidayStatus.IN_PROGRESS'),
+      label: t('IN_PROGRESS'),
       value: 'IN_PROGRESS',
     },
     {
-      label: t('holidayStatus.PASSED'),
+      label: t('PASSED'),
       value: 'PASSED',
     },
   ]

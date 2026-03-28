@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Send } from 'lucide-vue-next'
+import { Trash2 } from 'lucide-vue-next'
 import { AlertDialogCancel } from 'reka-ui'
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
 
@@ -15,8 +15,6 @@ import { useI18n } from 'vue-i18n'
 const { holidayId } = defineProps<{ holidayId?: number }>()
 
 const { t } = useI18n({
-  useScope: 'global',
-  inheritLocale: true,
   messages: {
     en: {
       tooltip: 'Delete',
@@ -77,8 +75,11 @@ const { mutate: deleteHoliday, isPending } = useMutation({
 <template>
   <AlertDialog v-model:open="openModal">
     <template #trigger>
-      <ButtonWrapper class="btn-square btn-ghost tooltip" :data-tip="t('tooltip')">
-        <Send class="size-5 stroke-2" />
+      <ButtonWrapper
+        class="btn-square btn-xs btn-error btn-outline tooltip"
+        :data-tip="t('tooltip')"
+      >
+        <Trash2 class="text-error size-4 stroke-2" />
       </ButtonWrapper>
     </template>
     <div class="flex flex-col gap-4 p-6">
@@ -90,7 +91,7 @@ const { mutate: deleteHoliday, isPending } = useMutation({
         <AlertDialogCancel class="btn btn-outline px-8">
           {{ t('modal.cancel') }}
         </AlertDialogCancel>
-        <ButtonWrapper @click="deleteHoliday" :is-loading="isPending" class="btn-primary px-8">
+        <ButtonWrapper @click="deleteHoliday" :is-loading="isPending" class="btn-error px-8">
           {{ t('modal.confirm') }}
         </ButtonWrapper>
       </div>

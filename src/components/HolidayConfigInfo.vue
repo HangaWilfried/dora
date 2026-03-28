@@ -67,7 +67,7 @@ const dayInterval = computed(() => {
 
 <template>
   <div class="border-info rounded-lg border p-0.5">
-    <div class="bg-primary text-primary-content flex flex-col gap-2 rounded-lg p-2">
+    <div class="bg-primary/15 flex flex-col gap-2 rounded-lg p-2">
       <DoraLoading v-if="isLoading || isFetching" />
       <template v-else-if="holidayConfig">
         <h1 class="text-base-content text-sm font-medium">{{ holidayConfig.description }}</h1>
