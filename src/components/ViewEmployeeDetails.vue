@@ -29,13 +29,15 @@ const { t } = useI18n({
       modal: {
         field: {
           email: { label: 'Email', placeholder: 'Ex: [EMAIL_ADDRESS]' },
-          password: { label: 'Password', placeholder: 'Ex: password' },
           role: { label: 'Role', placeholder: 'Ex: Employee' },
           firstname: { label: 'First name', placeholder: 'Eg: John' },
           lastname: { label: 'Last name', placeholder: 'Eg: Doe' },
+          dateOfBirth: { label: 'Date of birth' },
         },
         btn: {
           cancel: 'Close',
+          copy: 'Copy credentials',
+          copied: 'Copied!',
         },
       },
     },
@@ -50,26 +52,28 @@ const { t } = useI18n({
         title: 'Nouvel employé',
         field: {
           email: { label: 'Email', placeholder: 'Ex: [EMAIL_ADDRESS]' },
-          password: { label: 'Password', placeholder: 'Ex: password' },
           role: { label: 'Role', placeholder: 'Ex: Employee' },
           firstname: { label: 'Prénom', placeholder: 'Ex: Jean' },
           lastname: { label: 'Nom', placeholder: 'Ex: Dupont' },
+          dateOfBirth: { label: 'Date de naissance' },
         },
         btn: {
           cancel: 'Fermer',
+          copy: 'Copier les identifiants',
+          copied: 'Copié !',
         },
       },
     },
   },
 })
 
-const { resetForm } = useForm({
+const { resetForm, values, meta } = useForm({
   initialValues: {
     role: employee.role,
     email: employee.email,
-    password: employee.password,
     lastname: employee.lastname,
     firstname: employee.firstname,
+    dateOfBirth: employee.dateOfBirth,
   },
 })
 
@@ -106,6 +110,20 @@ const roles = computed(() => {
     { label: t('role.EMPLOYEE'), value: 'EMPLOYEE' },
   ]
 })
+
+const copied = ref(false)
+
+async function copyCredentials() {
+  const password =
+    values.role === 'ADMIN'
+      ? import.meta.env.VITE_DEFAULT_ADMIN_PASSWORD
+      : import.meta.env.VITE_DEFAULT_EMPLOYEE_PASSWORD
+
+  const text = `Email: ${values.email}\nPassword: ${password}`
+  await navigator.clipboard.writeText(text)
+  copied.value = true
+  setTimeout(() => (copied.value = false), 2000)
+}
 </script>
 
 <template>
@@ -134,21 +152,38 @@ const roles = computed(() => {
             :label="t('modal.field.firstname.label')"
             :placeholder="t('modal.field.firstname.placeholder')"
           />
-          <TextInput
-            name="email"
-            :disabled="true"
-            :label="t('modal.field.email.label')"
-            :placeholder="t('modal.field.email.placeholder')"
-          />
-          <SelectInput
-            name="role"
-            :options="roles"
-            :disabled="true"
-            :label="t('modal.field.role.label')"
-            :placeholder="t('modal.field.role.placeholder')"
-          />
+          <div class="col-span-2 grid grid-cols-3 gap-2">
+            <TextInput
+              name="email"
+              :disabled="true"
+              :label="t('modal.field.email.label')"
+              :placeholder="t('modal.field.email.placeholder')"
+            />
+            <TextInput
+              name="dateOfBirth"
+              :disabled="true"
+              :label="t('modal.field.dateOfBirth.label')"
+            />
+            <SelectInput
+              name="role"
+              :options="roles"
+              :disabled="true"
+              :label="t('modal.field.role.label')"
+              :placeholder="t('modal.field.role.placeholder')"
+            />
+          </div>
         </div>
         <div class="flex items-center justify-end gap-2">
+          <ButtonWrapper
+            v-if="meta.valid"
+            type="button"
+            class="btn-warning mb-1 gap-2 self-end"
+            @click="copyCredentials"
+          >
+            <Check v-if="copied" class="size-4" />
+            <Copy v-else class="size-4" />
+            {{ copied ? t('modal.btn.copied') : t('modal.btn.copy') }}
+          </ButtonWrapper>
           <AlertDialogCancel class="btn btn-primary btn-outline px-8">
             {{ t('modal.btn.cancel') }}
           </AlertDialogCancel>

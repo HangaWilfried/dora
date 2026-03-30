@@ -10,8 +10,8 @@ import PageTitle from '@/components/PageTitle.vue'
 import DoraLoading from '@/components/DoraLoading.vue'
 import BaseContainer from '@/components/BaseContainer.vue'
 import DeleteEmployee from '@/components/DeleteEmployee.vue'
-import CreateEmployeeRequest from '@/components/CreateEmployeeRequest.vue'
 import ViewEmployeeDetails from '@/components/ViewEmployeeDetails.vue'
+import CreateEmployeeRequest from '@/components/CreateEmployeeRequest.vue'
 
 const { t } = useI18n({
   messages: {

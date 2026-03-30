@@ -32,18 +32,6 @@ const { t, locale } = useI18n({
       modal: {
         title: 'New employee',
         field: {
-          email: {
-            label: 'Email',
-            placeholder: 'Ex: [EMAIL_ADDRESS]',
-          },
-          password: {
-            label: 'Password',
-            placeholder: 'Ex: password',
-          },
-          confirmPassword: {
-            label: 'Confirm Password',
-            placeholder: 'Ex: password',
-          },
           role: {
             label: 'Role',
             placeholder: 'Ex: Employee',
@@ -63,8 +51,6 @@ const { t, locale } = useI18n({
         btn: {
           cancel: 'Cancel',
           save: 'Save',
-          copy: 'Copy credentials',
-          copied: 'Copied!',
         },
       },
     },
@@ -81,18 +67,6 @@ const { t, locale } = useI18n({
       modal: {
         title: 'Nouvel employé',
         field: {
-          email: {
-            label: 'Email',
-            placeholder: 'Ex: [EMAIL_ADDRESS]',
-          },
-          password: {
-            label: 'Password',
-            placeholder: 'Ex: password',
-          },
-          confirmPassword: {
-            label: 'Confirm Password',
-            placeholder: 'Ex: password',
-          },
           role: {
             label: 'Role',
             placeholder: 'Ex: Employee',
@@ -112,8 +86,6 @@ const { t, locale } = useI18n({
         btn: {
           cancel: 'Annuler',
           save: 'Enregistrer',
-          copy: 'Copier les identifiants',
-          copied: 'Copié !',
         },
       },
     },
@@ -133,20 +105,15 @@ const openModal = ref<boolean>(false)
 const { isRequestFailed, getErrorMessage, setError } = useError()
 
 const schema = yup.object({
-  firstname: yup.string().required('required_lbl'),
-  lastname: yup.string().required('required_lbl'),
-  email: yup.string().email('invalid_email_lbl').required('required_lbl'),
-  password: yup.string().required('required_lbl'),
-  confirmPassword: yup
-    .string()
-    .required('required_lbl')
-    .oneOf([yup.ref('password')], 'passwords_do_not_match_lbl'),
   role: yup.string().required('required_lbl'),
+  lastname: yup.string().required('required_lbl'),
+  firstname: yup.string().required('required_lbl'),
+  dateOfBirth: yup.string().required('required_lbl'),
 })
 
 type EmployeePayload = yup.InferType<typeof schema>
 
-const { handleSubmit, values, meta } = useForm({
+const { handleSubmit } = useForm({
   validationSchema: toTypedSchema(schema),
 })
 
@@ -169,15 +136,6 @@ const { mutate, isPending } = useMutation({
 })
 
 const createEmployee = handleSubmit((values) => mutate(values))
-
-const copied = ref(false)
-
-async function copyCredentials() {
-  const text = `Email: ${values.email}\nPassword: ${values.password}`
-  await navigator.clipboard.writeText(text)
-  copied.value = true
-  setTimeout(() => (copied.value = false), 2000)
-}
 </script>
 
 <template>
@@ -225,16 +183,6 @@ async function copyCredentials() {
           />
         </div>
         <div class="mt-2 flex items-center justify-end gap-2 px-6 py-4">
-          <ButtonWrapper
-            v-if="meta.valid"
-            type="button"
-            class="btn-warning mb-1 gap-2 self-end"
-            @click="copyCredentials"
-          >
-            <Check v-if="copied" class="size-4" />
-            <Copy v-else class="size-4" />
-            {{ copied ? t('modal.btn.copied') : t('modal.btn.copy') }}
-          </ButtonWrapper>
           <AlertDialogCancel class="btn btn-outline px-8">
             {{ t('modal.btn.cancel') }}
           </AlertDialogCancel>
