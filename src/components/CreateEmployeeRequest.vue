@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
-import { Check, Copy, UserPlus } from 'lucide-vue-next'
+import { UserPlus } from 'lucide-vue-next'
 import { AlertDialogCancel } from 'reka-ui'
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
 
