@@ -79,7 +79,7 @@ const { mutate: deleteHoliday, isPending } = useMutation({
         class="btn-square btn-xs btn-error btn-outline tooltip"
         :data-tip="t('tooltip')"
       >
-        <Trash2 class="text-error size-4 stroke-2" />
+        <Trash2 class="size-4 stroke-2" />
       </ButtonWrapper>
     </template>
     <div class="flex flex-col gap-4 p-6">

@@ -78,7 +78,7 @@ const { mutate: publishHoliday, isPending } = useMutation({
         class="btn-square btn-xs btn-secondary btn-outline tooltip"
         :data-tip="t('tooltip')"
       >
-        <RotateCcw class="text-secondary-content/60 size-5 stroke-2" />
+        <RotateCcw class="size-5 stroke-2" />
       </ButtonWrapper>
     </template>
     <div class="flex flex-col gap-4 p-6">

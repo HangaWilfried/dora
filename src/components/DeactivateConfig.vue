@@ -95,7 +95,7 @@ const { mutate: deactivateHolidayConfig, isPending } = useMutation({
         <ButtonWrapper
           @click="deactivateHolidayConfig"
           :is-loading="isPending"
-          class="btn-primary px-8"
+          class="btn-error px-8"
         >
           {{ t('modal.confirm') }}
         </ButtonWrapper>

@@ -165,7 +165,7 @@ const editLeaveRequest = handleSubmit((values) => mutate(values))
         class="btn-square btn-xs btn-primary btn-outline tooltip"
         :data-tip="t('tooltip')"
       >
-        <Pencil class="text-primary size-4 stroke-2" />
+        <Pencil class="size-4 stroke-2" />
       </ButtonWrapper>
     </template>
     <template #default>
