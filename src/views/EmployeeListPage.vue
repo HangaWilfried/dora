@@ -72,7 +72,7 @@ const {
   isLoading,
   isFetching,
 } = useQuery({
-  queryKey: ['employees'],
+  queryKey: ['users'],
   queryFn: async () => {
     const response = await AdminService.getAllEmployees()
     if (isRequestFailed(response)) {

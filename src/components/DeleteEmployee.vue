@@ -64,7 +64,7 @@ const { mutate: deleteEmployee, isPending } = useMutation({
   onSuccess: () => {
     openModal.value = false
     toast.success(t('toast.success'))
-    queryClient.invalidateQueries({ queryKey: ['employees'] })
+    queryClient.invalidateQueries({ queryKey: ['users'] })
   },
 })
 </script>

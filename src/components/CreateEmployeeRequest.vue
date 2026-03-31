@@ -119,7 +119,15 @@ const { handleSubmit } = useForm({
 
 const { mutate, isPending } = useMutation({
   mutationFn: async (payload: EmployeePayload) => {
-    const response = await AdminService.createEmployee({ body: payload })
+    const createUser = () => {
+      if (payload.role === 'ADMIN') {
+        return AdminService.createAdmin({ body: payload })
+      }
+
+      return AdminService.createEmployee({ body: payload })
+    }
+
+    const response = await createUser()
 
     if (isRequestFailed(response)) {
       setError(response)
@@ -131,7 +139,7 @@ const { mutate, isPending } = useMutation({
   onSuccess: () => {
     openModal.value = false
     toast.success(t('toast.success'))
-    queryClient.invalidateQueries({ queryKey: ['employees'] })
+    queryClient.invalidateQueries({ queryKey: ['users'] })
   },
 })
 
