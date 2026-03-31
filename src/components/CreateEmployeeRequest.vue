@@ -168,26 +168,12 @@ const createEmployee = handleSubmit((values) => mutate(values))
             :label="t('modal.field.firstname.label')"
             :placeholder="t('modal.field.firstname.placeholder')"
           />
-          <TextInput
-            name="email"
-            :label="t('modal.field.email.label')"
-            :placeholder="t('modal.field.email.placeholder')"
-          />
+          <TextInput type="date" name="dateOfBirth" :label="t('modal.field.dateOfBirth.label')" />
           <SelectInput
             name="role"
             :options="roles"
             :label="t('modal.field.role.label')"
             :placeholder="t('modal.field.role.placeholder')"
-          />
-          <TextInput
-            name="password"
-            :label="t('modal.field.password.label')"
-            :placeholder="t('modal.field.password.placeholder')"
-          />
-          <TextInput
-            name="confirmPassword"
-            :label="t('modal.field.confirmPassword.label')"
-            :placeholder="t('modal.field.confirmPassword.placeholder')"
           />
         </div>
         <div class="mt-2 flex items-center justify-end gap-2 px-6 py-4">
