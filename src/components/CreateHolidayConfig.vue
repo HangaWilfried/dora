@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Plus } from 'lucide-vue-next'
 import { AlertDialogCancel } from 'reka-ui'
-import { useMutation, useQueryClient } from '@tanstack/vue-query'
+import { useMutation } from '@tanstack/vue-query'
 
 import { toast } from '@/plugins/toast.ts'
 import { useError } from '@/composables/useError.ts'
@@ -15,7 +15,7 @@ import AlertDialog from '@/components/AlertDialog.vue'
 import TextareaInput from '@/components/TextareaInput.vue'
 import ButtonWrapper from '@/components/ButtonWrapper.vue'
 
-const queryClient = useQueryClient()
+const { refetchConfig } = defineProps<{ refetchConfig: VoidFunction }>()
 
 const { t } = useI18n({
   messages: {
@@ -109,7 +109,7 @@ const { mutate, isPending } = useMutation({
   onSuccess: () => {
     openModal.value = false
     toast.success(t('toast.success'))
-    queryClient.invalidateQueries({ queryKey: ['holidayConfigs'] })
+    refetchConfig()
   },
 })
 

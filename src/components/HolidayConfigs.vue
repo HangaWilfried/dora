@@ -58,7 +58,7 @@ const {
   <section class="flex flex-col gap-4">
     <div class="flex items-center justify-between">
       <span class="text-sm">{{ t('config') }}</span>
-      <CreateHolidayConfig />
+      <CreateHolidayConfig :refetch-config="refetchConfigs" />
     </div>
     <DoraLoading v-if="isLoading || isFetching" />
     <div v-else-if="holidayConfigs && holidayConfigs.length" class="space-y-2">
