@@ -18,6 +18,8 @@ services:
       - DEFAULT_EMAIL_SUFFIX=@lao-sarl.com
       - SCHEDULER_FIXED_RATE=60000
       - TOKEN_EXPIRATION_DATE=3
+      - DEFAULT_SUPER_ADMIN_FIRSTNAME=Dora
+      - DEFAULT_SUPER_ADMIN_LASTNAME=Tchakam
     networks:
       - leavemanager-network
     depends_on:

@@ -32,7 +32,7 @@ defineProps<{ holiday: HolidayDTO }>()
         <SubmitVacationRequest :holiday-id="holiday.id" />
         <EditVacationRequest :holiday="holiday" />
       </template>
-      <RevokeVacationRequest :holiday-id="holiday.id" />
+      <RevokeVacationRequest v-else :holiday-id="holiday.id" />
       <DeleteVacationRequest :holiday-id="holiday.id" />
     </div>
   </div>

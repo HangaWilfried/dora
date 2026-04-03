@@ -10,7 +10,7 @@ const badgeClass = computed(() => {
 
   switch (props.status) {
     case 'DRAFT':
-      return `${base} bg-neutral/10 text-neutral`
+      return `${base} bg-neutral text-secondary-content`
     case 'PUBLISH':
       return `${base} bg-info/10 text-info`
     case 'APPROVED':

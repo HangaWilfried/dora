@@ -91,7 +91,7 @@ const { mutate: publishHoliday, isPending } = useMutation({
         <AlertDialogCancel class="btn btn-outline px-8">
           {{ t('modal.cancel') }}
         </AlertDialogCancel>
-        <ButtonWrapper @click="publishHoliday" :is-loading="isPending" class="btn-primary px-8">
+        <ButtonWrapper @click="publishHoliday" :is-loading="isPending" class="btn-success px-8">
           {{ t('modal.confirm') }}
         </ButtonWrapper>
       </div>

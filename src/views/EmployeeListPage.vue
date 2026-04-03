@@ -12,6 +12,7 @@ import BaseContainer from '@/components/BaseContainer.vue'
 import DeleteEmployee from '@/components/DeleteEmployee.vue'
 import ViewEmployeeDetails from '@/components/ViewEmployeeDetails.vue'
 import CreateEmployeeRequest from '@/components/CreateEmployeeRequest.vue'
+import { useAuth } from '@/plugins/useAuth.ts'
 
 const { t } = useI18n({
   messages: {
@@ -65,6 +66,9 @@ const { t } = useI18n({
 })
 
 const search = ref('')
+const { hasRole } = useAuth()
+const isCurrentUserAdminMember = computed(() => hasRole(['ADMIN', 'SUPER_ADMIN']))
+
 const { isRequestFailed, getErrorMessage, setError } = useError()
 
 const {
@@ -126,7 +130,9 @@ const filteredEmployees = computed(() => {
               <th class="font-medium">{{ t('table.email') }}</th>
               <th class="font-medium">{{ t('table.role') }}</th>
               <!--              <th class="font-medium">{{ t('table.status') }}</th>-->
-              <th class="text-right font-medium">{{ t('table.actions') }}</th>
+              <th v-if="isCurrentUserAdminMember" class="text-right font-medium">
+                {{ t('table.actions') }}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -150,7 +156,7 @@ const filteredEmployees = computed(() => {
               <!--                  {{ employee.isActivated ? t('status.active') : t('status.inactive') }}-->
               <!--                </span>-->
               <!--              </td>-->
-              <td>
+              <td v-if="isCurrentUserAdminMember">
                 <span class="flex items-center justify-end gap-2">
                   <ViewEmployeeDetails :employee="employee" />
                   <DeleteEmployee :employee="employee" />

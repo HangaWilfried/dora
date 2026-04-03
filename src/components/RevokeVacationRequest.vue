@@ -48,7 +48,7 @@ const queryClient = useQueryClient()
 const openModal = ref<boolean>(false)
 const { isRequestFailed, getErrorMessage, setError } = useError()
 
-const { mutate: publishHoliday, isPending } = useMutation({
+const { mutate: unpublishHoliday, isPending } = useMutation({
   mutationFn: async () => {
     if (!holidayId) {
       throw new Error('Missing holiday id')
@@ -75,7 +75,7 @@ const { mutate: publishHoliday, isPending } = useMutation({
   <AlertDialog v-model:open="openModal">
     <template #trigger>
       <ButtonWrapper
-        class="btn-square btn-xs btn-secondary btn-outline tooltip"
+        class="btn-square btn-xs btn-secondary text-secondary-content btn-outline tooltip p-0.5"
         :data-tip="t('tooltip')"
       >
         <RotateCcw class="size-5 stroke-2" />
@@ -90,7 +90,7 @@ const { mutate: publishHoliday, isPending } = useMutation({
         <AlertDialogCancel class="btn btn-outline px-8">
           {{ t('modal.cancel') }}
         </AlertDialogCancel>
-        <ButtonWrapper @click="publishHoliday" :is-loading="isPending" class="btn-primary px-8">
+        <ButtonWrapper @click="unpublishHoliday" :is-loading="isPending" class="btn-primary px-8">
           {{ t('modal.confirm') }}
         </ButtonWrapper>
       </div>

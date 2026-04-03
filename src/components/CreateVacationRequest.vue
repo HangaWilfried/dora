@@ -108,10 +108,16 @@ const {
     return response.data
   },
   select(types) {
-    return types?.map((type) => ({
-      value: type.id,
-      label: `${type.name} (${type.description})`,
-    }))
+    return types?.map((type) => {
+      const result = type.description ?? ''
+      const descriptionSize = type.description?.length ?? 0
+      const description = descriptionSize > 45 ? result.slice(0, 45).concat('...') : result
+
+      return {
+        value: type.id,
+        label: `${type.name} - ${description}`,
+      }
+    })
   },
 })
 
