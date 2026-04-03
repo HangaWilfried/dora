@@ -125,7 +125,7 @@ const filteredEmployees = computed(() => {
               <th class="font-medium">{{ t('table.name') }}</th>
               <th class="font-medium">{{ t('table.email') }}</th>
               <th class="font-medium">{{ t('table.role') }}</th>
-              <th class="font-medium">{{ t('table.status') }}</th>
+              <!--              <th class="font-medium">{{ t('table.status') }}</th>-->
               <th class="text-right font-medium">{{ t('table.actions') }}</th>
             </tr>
           </thead>
@@ -138,20 +138,20 @@ const filteredEmployees = computed(() => {
               <td class="font-medium">{{ employee.firstname }} {{ employee.lastname }}</td>
               <td class="text-secondary-content">{{ employee.email }}</td>
               <td class="text-secondary-content">{{ t(`role.${employee.role}`) }}</td>
+              <!--              <td>-->
+              <!--                <span-->
+              <!--                  :class="[-->
+              <!--                    'rounded-lg px-2 py-1 text-xs font-medium',-->
+              <!--                    employee.isActivated-->
+              <!--                      ? 'bg-success/10 text-success'-->
+              <!--                      : 'bg-neutral text-base-content/40',-->
+              <!--                  ]"-->
+              <!--                >-->
+              <!--                  {{ employee.isActivated ? t('status.active') : t('status.inactive') }}-->
+              <!--                </span>-->
+              <!--              </td>-->
               <td>
-                <span
-                  :class="[
-                    'rounded-lg px-2 py-1 text-xs font-medium',
-                    employee.isActivated
-                      ? 'bg-success/10 text-success'
-                      : 'bg-neutral text-base-content/40',
-                  ]"
-                >
-                  {{ employee.isActivated ? t('status.active') : t('status.inactive') }}
-                </span>
-              </td>
-              <td>
-                <span class="flex items-center gap-2">
+                <span class="flex items-center justify-end gap-2">
                   <ViewEmployeeDetails :employee="employee" />
                   <DeleteEmployee :employee="employee" />
                 </span>

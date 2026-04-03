@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
-import { Ellipsis } from 'lucide-vue-next'
 import { AlertDialogCancel } from 'reka-ui'
 import { useQuery } from '@tanstack/vue-query'
+import { Ellipsis, Check, Copy } from 'lucide-vue-next'
 
 import { useForm } from '@/plugins/validator.ts'
 import { useError } from '@/composables/useError.ts'
@@ -67,7 +67,7 @@ const { t } = useI18n({
   },
 })
 
-const { resetForm, values, meta } = useForm({
+const { resetForm, values } = useForm({
   initialValues: {
     role: employee.role,
     email: employee.email,
@@ -152,41 +152,34 @@ async function copyCredentials() {
             :label="t('modal.field.firstname.label')"
             :placeholder="t('modal.field.firstname.placeholder')"
           />
-          <div class="col-span-2 grid grid-cols-3 gap-2">
-            <TextInput
-              name="email"
-              :disabled="true"
-              :label="t('modal.field.email.label')"
-              :placeholder="t('modal.field.email.placeholder')"
-            />
-            <TextInput
-              name="dateOfBirth"
-              :disabled="true"
-              :label="t('modal.field.dateOfBirth.label')"
-            />
-            <SelectInput
-              name="role"
-              :options="roles"
-              :disabled="true"
-              :label="t('modal.field.role.label')"
-              :placeholder="t('modal.field.role.placeholder')"
-            />
-          </div>
+          <TextInput
+            name="dateOfBirth"
+            :disabled="true"
+            :label="t('modal.field.dateOfBirth.label')"
+          />
+          <SelectInput
+            name="role"
+            :options="roles"
+            :disabled="true"
+            :label="t('modal.field.role.label')"
+            :placeholder="t('modal.field.role.placeholder')"
+          />
+          <TextInput
+            name="email"
+            :disabled="true"
+            class="col-span-2"
+            :label="t('modal.field.email.label')"
+            :placeholder="t('modal.field.email.placeholder')"
+          />
         </div>
         <div class="flex items-center justify-end gap-2">
-          <ButtonWrapper
-            v-if="meta.valid"
-            type="button"
-            class="btn-warning mb-1 gap-2 self-end"
-            @click="copyCredentials"
-          >
-            <Check v-if="copied" class="size-4" />
-            <Copy v-else class="size-4" />
-            {{ copied ? t('modal.btn.copied') : t('modal.btn.copy') }}
-          </ButtonWrapper>
-          <AlertDialogCancel class="btn btn-primary btn-outline px-8">
+          <AlertDialogCancel class="btn btn-secondary px-8">
             {{ t('modal.btn.cancel') }}
           </AlertDialogCancel>
+          <ButtonWrapper type="button" class="btn-primary gap-2" @click="copyCredentials">
+            <component :is="copied ? Check : Copy" class="size-4" />
+            {{ copied ? t('modal.btn.copied') : t('modal.btn.copy') }}
+          </ButtonWrapper>
         </div>
       </form>
     </template>

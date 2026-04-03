@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { computed, type Component } from 'vue'
-
-import { useAuth } from '@/plugins/useAuth'
 import { Info, Users2, CalendarDays, ClockAlert, FileSpreadsheet } from 'lucide-vue-next'
 
+import { useAuth } from '@/plugins/useAuth'
+import { useQuery } from '@tanstack/vue-query'
+import { useError } from '@/composables/useError.ts'
+import { AdminService, HolidayService } from '@/services/leavemanager'
+
 import PageTitle from '@/components/PageTitle.vue'
+import DoraLoading from '@/components/DoraLoading.vue'
 import BaseContainer from '@/components/BaseContainer.vue'
 import StatisticCard from '@/components/StatisticCard.vue'
 
@@ -59,13 +63,56 @@ const { t } = useI18n({
 const { hasRole, getUserInfo } = useAuth()
 const userInfo = getUserInfo()
 
+const { isRequestFailed, getErrorMessage, setError } = useError()
+
+const employeesResponse = useQuery({
+  queryKey: ['users'],
+  queryFn: async () => {
+    const response = await AdminService.getAllEmployees()
+    if (isRequestFailed(response)) {
+      setError(response)
+      throw getErrorMessage(response)
+    }
+    return response.data
+  },
+})
+
+const holidaysResponse = useQuery({
+  queryKey: ['allVacations'],
+  queryFn: async () => {
+    const response = await HolidayService.getAllHolidays()
+    if (isRequestFailed(response)) {
+      setError(response)
+      throw getErrorMessage(response)
+    }
+
+    return response.data
+  },
+})
+
+const isLoading = computed(() => {
+  return (
+    employeesResponse.isLoading.value ||
+    employeesResponse.isFetching.value ||
+    holidaysResponse.isLoading.value ||
+    holidaysResponse.isFetching.value
+  )
+})
+
 const cards = computed((): Card[] => {
+  const users = employeesResponse.data.value
+  const holidays = holidaysResponse.data.value
+
+  const rejectedHolidays = holidays?.filter((x) => x.status === 'REFUSED')
+  const approvedHolidays = holidays?.filter((x) => x.status === 'APPROVED')
+  const pendingHolidays = holidays?.filter((x) => x.status === 'IN_PROGRESS')
+
   const allCards: Card[] = [
     {
       id: 'totalRequests',
       label: t('cards.totalRequests'),
       icon: FileSpreadsheet,
-      value: 0,
+      value: holidays?.length ?? 0,
       theme: 'secondary',
       requiredRoles: undefined,
     },
@@ -73,7 +120,7 @@ const cards = computed((): Card[] => {
       id: 'pending',
       label: t('cards.pending'),
       icon: ClockAlert,
-      value: 0,
+      value: pendingHolidays?.length ?? 0,
       theme: 'warning',
       requiredRoles: ['ADMIN', 'SUPER_ADMIN'],
     },
@@ -81,7 +128,7 @@ const cards = computed((): Card[] => {
       id: 'approved',
       label: t('cards.approved'),
       icon: CalendarDays,
-      value: 0,
+      value: approvedHolidays?.length ?? 0,
       theme: 'success',
       requiredRoles: ['ADMIN', 'SUPER_ADMIN'],
     },
@@ -89,7 +136,7 @@ const cards = computed((): Card[] => {
       id: 'rejected',
       label: t('cards.rejected'),
       icon: CalendarDays,
-      value: 0,
+      value: rejectedHolidays?.length ?? 0,
       theme: 'error',
       requiredRoles: ['ADMIN', 'SUPER_ADMIN'],
     },
@@ -97,8 +144,8 @@ const cards = computed((): Card[] => {
       id: 'totalEmployees',
       label: t('cards.totalEmployees'),
       icon: Users2,
-      value: 0,
       theme: 'primary',
+      value: users?.length ?? 0,
       requiredRoles: ['ADMIN', 'SUPER_ADMIN'],
     },
   ]
@@ -122,14 +169,17 @@ const cards = computed((): Card[] => {
       <span class="text-xs">{{ t('guide') }}</span>
     </PageTitle>
     <div class="grid grid-cols-5 gap-4">
-      <StatisticCard
-        v-for="card in cards"
-        :key="card.id"
-        :label="card.label"
-        :icon="card.icon"
-        :value="card.value"
-        :theme="card.theme"
-      />
+      <DoraLoading v-if="isLoading" />
+      <template v-else>
+        <StatisticCard
+          v-for="card in cards"
+          :key="card.id"
+          :label="card.label"
+          :icon="card.icon"
+          :value="card.value"
+          :theme="card.theme"
+        />
+      </template>
     </div>
     <div class="card">
       <h1 class="card-title text-sm font-normal">
