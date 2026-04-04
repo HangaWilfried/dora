@@ -1,18 +1,22 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { MoveRight } from 'lucide-vue-next'
 
 import { useAuth } from '@/plugins/useAuth.ts'
 import { getLocaleDate } from '@/plugins/date.ts'
-import type { HolidayDTO } from '@/services/leavemanager'
+import { useHolidayAllowedAction } from '@/composables/useHolidayAllowedAction.ts'
 
+import type { HolidayDTO } from '@/services/leavemanager'
 import HolidayStatus from '@/components/HolidayStatus.vue'
 import AcceptHolidayRequest from '@/components/AcceptHolidayRequest.vue'
 import RejectHolidayRequest from '@/components/RejectHolidayRequest.vue'
-import { useI18n } from 'vue-i18n'
 
 const { holiday } = defineProps<{ holiday: HolidayDTO }>()
 const { getUserInfo } = useAuth()
+
+const status = computed(() => holiday.status)
+const { canManuallyChangeHolidayStatus } = useHolidayAllowedAction(status)
 
 const isCurrentUserAuthor = computed(() => {
   const user = getUserInfo()
@@ -45,7 +49,7 @@ const { t } = useI18n({
     </td>
     <td>
       <span v-if="isCurrentUserAuthor" class="badge badge-warning">{{ t('you') }}</span>
-      <div v-else class="flex items-center gap-2">
+      <div v-else-if="canManuallyChangeHolidayStatus" class="flex items-center gap-2">
         <AcceptHolidayRequest :holiday-id="holiday.id" />
         <RejectHolidayRequest :holiday-id="holiday.id" />
       </div>

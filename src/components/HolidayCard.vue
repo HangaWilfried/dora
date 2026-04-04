@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { MoveRight } from 'lucide-vue-next'
+
 import { getLocaleDate } from '@/plugins/date'
 import type { HolidayDTO } from '@/services/leavemanager'
+import { useHolidayAllowedAction } from '@/composables/useHolidayAllowedAction.ts'
 
 import HolidayStatus from '@/components/HolidayStatus.vue'
 import EditVacationRequest from '@/components/EditVacationRequest.vue'
@@ -9,7 +12,10 @@ import SubmitVacationRequest from '@/components/SubmitVacationRequest.vue'
 import DeleteVacationRequest from '@/components/DeleteVacationRequest.vue'
 import RevokeVacationRequest from '@/components/RevokeVacationRequest.vue'
 
-defineProps<{ holiday: HolidayDTO }>()
+const { holiday } = defineProps<{ holiday: HolidayDTO }>()
+
+const status = computed(() => holiday.status)
+const { canManuallyChangeHolidayStatus, canDeleteHoliday } = useHolidayAllowedAction(status)
 </script>
 
 <template>
@@ -28,12 +34,14 @@ defineProps<{ holiday: HolidayDTO }>()
       <span>{{ holiday.description }}</span>
     </div>
     <div class="flex items-center gap-2">
-      <template v-if="holiday.status === 'DRAFT'">
-        <SubmitVacationRequest :holiday-id="holiday.id" />
-        <EditVacationRequest :holiday="holiday" />
+      <template v-if="canManuallyChangeHolidayStatus">
+        <template v-if="holiday.status === 'DRAFT'">
+          <SubmitVacationRequest :holiday-id="holiday.id" />
+          <EditVacationRequest :holiday="holiday" />
+        </template>
+        <RevokeVacationRequest v-else :holiday-id="holiday.id" />
       </template>
-      <RevokeVacationRequest v-else :holiday-id="holiday.id" />
-      <DeleteVacationRequest :holiday-id="holiday.id" />
+      <DeleteVacationRequest v-if="canDeleteHoliday" :holiday-id="holiday.id" />
     </div>
   </div>
 </template>
