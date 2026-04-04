@@ -48,7 +48,9 @@ const { t } = useI18n({
       <HolidayStatus :status="holiday.status" />
     </td>
     <td>
-      <span v-if="isCurrentUserAuthor" class="badge badge-warning">{{ t('you') }}</span>
+      <span v-if="isCurrentUserAuthor" class="badge badge-warning bg-warning/10 text-warning">
+        {{ t('you') }}
+      </span>
       <div v-else-if="canManuallyChangeHolidayStatus" class="flex items-center gap-2">
         <AcceptHolidayRequest :holiday-id="holiday.id" />
         <RejectHolidayRequest :holiday-id="holiday.id" />
