@@ -104,7 +104,7 @@ const cards = computed((): Card[] => {
   const holidays = holidaysResponse.data.value
 
   const rejectedHolidays = holidays?.filter((x) => x.status === 'REFUSED')
-  const approvedHolidays = holidays?.filter((x) => x.status === 'APPROVED')
+  const approvedHolidays = holidays?.filter((x) => x.status === 'VALIDATED')
   const pendingHolidays = holidays?.filter((x) => x.status === 'PUBLISH')
 
   const allCards: Card[] = [
