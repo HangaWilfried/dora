@@ -22,16 +22,18 @@ const { t } = useI18n({
 </script>
 
 <template>
-  <li
+  <div
     v-if="!user.isNull"
-    class="text-secondary-content/80 flex flex-row items-center py-4 text-sm leading-1"
+    class="text-secondary-content/80 flex flex-row items-center gap-4 py-4 text-sm leading-1"
   >
-    <div class="bg-base-200 flex size-10 items-center justify-center rounded-full uppercase">
+    <div
+      class="bg-base-200 flex size-8 shrink-0 items-center justify-center rounded-full uppercase"
+    >
       {{ user.email[0] }}
     </div>
-    <div class="flex shrink-0 flex-col items-start gap-1 truncate text-sm leading-tight">
+    <div class="flex flex-col items-start gap-1 text-xs leading-tight break-keep">
       <span>{{ user.email }}</span>
       <span class="text-xs">{{ t(user.role) }}</span>
     </div>
-  </li>
+  </div>
 </template>

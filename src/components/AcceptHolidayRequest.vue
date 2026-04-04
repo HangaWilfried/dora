@@ -55,7 +55,10 @@ const { mutate: acceptHolidayRequest, isPending } = useMutation({
       throw new Error('Missing holiday id')
     }
 
-    const response = await HolidayService.approvedHoliday({ path: { holidayId } })
+    const response = await HolidayService.approvedHoliday({
+      path: { holidayId },
+      body: { value: 'OK' },
+    })
 
     if (isRequestFailed(response)) {
       setError(response)

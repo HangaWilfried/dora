@@ -426,6 +426,7 @@ paths:
       security:
         - oAuth:
             - SUPER_ADMIN
+            - ADMIN
       requestBody:
         description: reason of the rejection
         required: false
