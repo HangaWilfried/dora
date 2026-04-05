@@ -10,7 +10,12 @@ const { theme = 'primary' } = defineProps<{
 </script>
 
 <template>
-  <div class="card flex flex-row items-center justify-between gap-2">
+  <div
+    :class="[
+      'card hover:border-primary flex cursor-pointer flex-row items-center',
+      'justify-between gap-2 transition duration-200 ease-in-out hover:shadow',
+    ]"
+  >
     <div class="flex flex-col gap-2">
       <h2>{{ label }}</h2>
       <span class="text-xl font-medium">{{ value }}</span>

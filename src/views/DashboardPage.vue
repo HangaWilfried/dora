@@ -105,7 +105,18 @@ const cards = computed((): Card[] => {
 
   const rejectedHolidays = holidays?.filter((x) => x.status === 'REFUSED')
   const approvedHolidays = holidays?.filter((x) => x.status === 'VALIDATED')
-  const pendingHolidays = holidays?.filter((x) => x.status === 'PUBLISH')
+  const pendingHolidays = holidays?.filter((x) => {
+    if (hasRole('EMPLOYEE')) {
+      if (userInfo.isNull) {
+        return x.status === 'PUBLISH'
+      }
+
+      return x.createdBy?.email === userInfo.email && x.status === 'PUBLISH'
+    }
+
+    return x.status === 'PUBLISH'
+  })
+
   const currentUserTotalHolidays = holidays?.filter((x) => {
     if (userInfo.isNull) {
       return true
@@ -129,7 +140,7 @@ const cards = computed((): Card[] => {
       icon: ClockAlert,
       value: pendingHolidays?.length ?? 0,
       theme: 'warning',
-      requiredRoles: ['ADMIN', 'SUPER_ADMIN'],
+      requiredRoles: undefined,
     },
     {
       id: 'approved',
