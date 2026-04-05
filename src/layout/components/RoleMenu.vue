@@ -53,7 +53,7 @@ const allMenus = [
     path: '/employees',
     name: 'employees',
     icon: Users2,
-    requiredRoles: undefined,
+    requiredRoles: ['ADMIN', 'SUPER_ADMIN'],
   },
   {
     path: '/settings',

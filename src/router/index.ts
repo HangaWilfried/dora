@@ -22,8 +22,15 @@ const router = createRouter({
       path: '/',
       component: AppLayout,
       children: [
-        { path: '', component: () => import('@/views/DashboardPage.vue') },
-        { path: 'employees', component: () => import('@/views/EmployeeListPage.vue') },
+        {
+          path: '',
+          component: () => import('@/views/DashboardPage.vue'),
+        },
+        {
+          path: 'employees',
+          component: () => import('@/views/EmployeeListPage.vue'),
+          meta: { requiredRoles: ['ADMIN', 'SUPER_ADMIN'] },
+        },
         {
           path: 'vacations',
           component: () => import('@/views/AllVacationsPage.vue'),

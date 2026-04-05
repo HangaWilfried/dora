@@ -106,13 +106,20 @@ const cards = computed((): Card[] => {
   const rejectedHolidays = holidays?.filter((x) => x.status === 'REFUSED')
   const approvedHolidays = holidays?.filter((x) => x.status === 'VALIDATED')
   const pendingHolidays = holidays?.filter((x) => x.status === 'PUBLISH')
+  const currentUserTotalHolidays = holidays?.filter((x) => {
+    if (userInfo.isNull) {
+      return true
+    }
+
+    return x.createdBy?.email === userInfo.email
+  })
 
   const allCards: Card[] = [
     {
       id: 'totalRequests',
       label: t('cards.totalRequests'),
       icon: FileSpreadsheet,
-      value: holidays?.length ?? 0,
+      value: currentUserTotalHolidays?.length ?? 0,
       theme: 'secondary',
       requiredRoles: undefined,
     },
